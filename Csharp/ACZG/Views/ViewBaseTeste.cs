@@ -1,6 +1,6 @@
 ﻿namespace ACZG.Views;
 
-public class BaseViewTeste : BaseView
+public class ViewBaseTeste : ViewBase
 {
     public void Escrever()
     {

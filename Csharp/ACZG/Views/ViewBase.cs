@@ -1,9 +1,10 @@
 ﻿namespace ACZG.Views;
 
-public abstract class BaseView
+public abstract class ViewBase
 {
     protected void EscreverLento(string texto, int delay = 50)
     {
+        Console.Clear();    
         for (int i = 0; i < texto.Length; i++)
         {
             Console.Write(texto[i]);

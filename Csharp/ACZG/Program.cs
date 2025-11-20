@@ -4,7 +4,7 @@ class Program
 {
     public static void Main(string[] args)
     {
-        var teste = new BaseViewTeste();
-        teste.Escrever();
+        var teste = new ViewFlorestaDoAtendimentus();
+        teste.IniciarFase();
     }
 }
