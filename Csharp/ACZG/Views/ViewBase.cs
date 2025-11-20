@@ -2,9 +2,27 @@
 
 public abstract class ViewBase
 {
+    public int ExibirMenuInicial()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            EscreverLento("=== ACZG RPG: A JORNADA DE HOT DOG ===");
+            Console.ResetColor();
+            Console.WriteLine("1. Iniciar Jornada");
+            Console.WriteLine("2. Sair");
+            Console.Write("Escolha uma opção: ");
+            string input = Console.ReadLine();
+
+            if (input == "1") return 1;
+            if (input == "2") return 2;
+            Console.Clear();
+        }
+    }
+
     protected void EscreverLento(string texto, int delay = 50)
     {
-        Console.Clear();    
         for (int i = 0; i < texto.Length; i++)
         {
             Console.Write(texto[i]);
@@ -15,7 +33,6 @@ public abstract class ViewBase
                 break;
             }
             Thread.Sleep(delay);
-            
         }
         Console.WriteLine();
     }
@@ -35,42 +52,54 @@ public abstract class ViewBase
             {
                 break;
             }
+
             if (tecla.Key == ConsoleKey.X)
             {
-                if (SairSimOuNao())
+                if (ConfirmarDesistencia())
                 {
-                    EncerrarJogo();
+                    ExecutarDesistenciaDaMissao();
                 }
-                Console.WriteLine("Continuamos a aventura.");
             }
         }
+
         Console.Clear();
     }
 
     protected void ExibirNarrativa(string texto)
     {
+        Console.Clear();
         EscreverLento(texto);
         Pausar();
     }
-    protected bool SairSimOuNao()
+
+    protected bool ConfirmarDesistencia()
     {
         while (true)
         {
             EscreverLento("Realmente deseja sair? (S/N)");
             string input = Console.ReadLine()?.ToUpper();
-            
+
             if (input == "S") return true;
             if (input == "N") return false;
-            
+
             Console.WriteLine("Opção inválida! Digite apenas S ou N.");
         }
     }
 
-    protected void EncerrarJogo()
+    public void ExecutarDesistenciaDaMissao()
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
-        EscreverLento("Você desistiu. O mundo cairá nas trevas de Glozium...");
+        EscreverLento("Você desistiu da missão.");
+        Console.ResetColor();
+        ExibirMenuInicial();
+    }
+    public void FecharPrograma()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        EscreverLento("Você desistiu. O mundo cairá nas trevas de Glozium.. \n" +
+                      "Fechando programa...");
         Console.ResetColor();
         Environment.Exit(0);
     }

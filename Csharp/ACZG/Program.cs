@@ -5,6 +5,12 @@ class Program
     public static void Main(string[] args)
     {
         var teste = new ViewFlorestaDoAtendimentus();
-        teste.IniciarFase();
+        while (true)
+        {
+            var opcao = teste.ExibirMenuInicial();
+            if(opcao == 1) teste.IniciarFase();
+            if(opcao == 2) teste.FecharPrograma();
+            break;
+        }
     }
 }
