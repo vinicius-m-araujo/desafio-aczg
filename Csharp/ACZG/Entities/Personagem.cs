@@ -7,6 +7,8 @@ public abstract class Personagem
     public int VidaMaxima { get;  protected set; }
     public int NumeroSecreto { get; protected set; }
     
+    public int Dano { get; set; }
+    
     private static Random Random = new Random();
     
     public Personagem(string nome, int vidaMaxima)

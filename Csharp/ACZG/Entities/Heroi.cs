@@ -6,7 +6,7 @@ public class Heroi : Personagem
 {
     public List<ItemBatalha> Inventario { get; set; } = new List<ItemBatalha>();
     public ItemBatalha ItemBatalhaEquipado { get; set; }
-    public int QtdDadosPorRodada { get; set; }
+    public int QtdJogadasPorRodada { get; set; } = 1;
     
     public Heroi(string nome, int vidaMaxima) : base(nome, vidaMaxima)
     {
@@ -37,7 +37,7 @@ public class Heroi : Personagem
 
     public void PagarComVida(int vida)
     {
-        if(VidaAtual >= vida) VidaAtual = vida;
+        if(VidaAtual >= vida) VidaAtual -= vida;
     }
 
     public void TrocarItem(ItemBatalha novoItemBatalha)
@@ -50,11 +50,13 @@ public class Heroi : Personagem
 
         if (ItemBatalhaEquipado != null)
         {
+            ItemBatalhaEquipado.RemoverBeneficio(this);
             Inventario.Add(ItemBatalhaEquipado);
             ItemBatalhaEquipado = null;
         }
         ItemBatalhaEquipado = novoItemBatalha;
         Inventario.Remove(novoItemBatalha);
         Console.WriteLine("Item equipado com sucesso!");
+        novoItemBatalha.AtivarBeneficio(this);
     }
 }

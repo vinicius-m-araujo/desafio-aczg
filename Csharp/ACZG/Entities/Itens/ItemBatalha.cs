@@ -1,4 +1,5 @@
 ﻿namespace ACZG.Entities.Itens;
+using Vilao;
 
 public abstract class ItemBatalha
 {
@@ -11,6 +12,7 @@ public abstract class ItemBatalha
         Formato = formato;
     }
 
-    public abstract void AtivarBeneficio();
-    public abstract void AplicarConsequencia();
+    public abstract void AtivarBeneficio(Heroi heroi);
+    public abstract void RemoverBeneficio(Heroi heroi);
+    public abstract void AplicarConsequencia(Vilao vilao);
 }
