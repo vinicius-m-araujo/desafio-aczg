@@ -4,14 +4,17 @@ namespace ACZG.Entities;
 
 public class Heroi : Personagem
 {
-    public List<ItemBatalha> Inventario { get; set; } = new List<ItemBatalha>();
+    public List<ItemBatalha> Inventario { get; set; } 
     public ItemBatalha ItemBatalhaEquipado { get; set; }
     public int QtdJogadasPorRodada { get; set; } = 1;
+    public bool ModoBerserker { get; set; } = false;
     
-    public Heroi(string nome, int vidaMaxima) : base(nome, vidaMaxima)
+    public Heroi()
     {
         Nome = "Hot Dog";
         VidaMaxima = 5;
+        VidaAtual = 5;
+        Inventario = new List<ItemBatalha> { new EspadaSimples() };
     }
 
     public void AumentarVidaMaxima(int bonus)
@@ -29,15 +32,10 @@ public class Heroi : Personagem
     {
         Inventario.Add(itemBatalha);
     }
-
-    public void AtualizarItem(ItemBatalha itemBatalha)
-    {
-        Inventario.Remove(itemBatalha);
-    }
-
+    
     public void PagarComVida(int vida)
     {
-        if(VidaAtual >= vida) VidaAtual -= vida;
+        if(VidaAtual > vida) VidaAtual -= vida;
     }
 
     public void TrocarItem(ItemBatalha novoItemBatalha)

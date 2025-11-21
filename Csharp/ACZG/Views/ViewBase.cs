@@ -1,6 +1,6 @@
 ﻿namespace ACZG.Views;
 
-public abstract class ViewBase
+public class ViewBase
 {
     public int ExibirMenuInicial()
     {
@@ -21,7 +21,7 @@ public abstract class ViewBase
         }
     }
 
-    protected void EscreverLento(string texto, int delay = 50)
+    public void EscreverLento(string texto, int delay = 50)
     {
         for (int i = 0; i < texto.Length; i++)
         {

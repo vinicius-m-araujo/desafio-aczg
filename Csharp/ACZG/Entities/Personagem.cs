@@ -5,12 +5,13 @@ public abstract class Personagem
     public string Nome { get; set; }
     public int VidaAtual { get; protected set;}
     public int VidaMaxima { get;  protected set; }
-    public int NumeroSecreto { get; protected set; }
+    public int NumeroSecreto { get; set; }
     
     public int Dano { get; set; }
     
-    private static Random Random = new Random();
-    
+    public Personagem()
+    {
+    }
     public Personagem(string nome, int vidaMaxima)
     {
         Nome = nome;
@@ -27,9 +28,10 @@ public abstract class Personagem
     
     public bool EstaVivo => VidaAtual > 0;
 
-    public void GerarNumeroSecreto()
+
+    public void SetarNumeroSecreto(int numeroSecreto)
     {
-        int numero = Random.Next(1, VidaMaxima + 1);
-        NumeroSecreto = numero;
+        NumeroSecreto = numeroSecreto;
     }
+    
 }

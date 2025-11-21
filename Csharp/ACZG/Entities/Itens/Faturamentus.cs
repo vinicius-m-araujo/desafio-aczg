@@ -20,8 +20,8 @@ public class Faturamentus : ItemBatalha
         heroi.QtdJogadasPorRodada = 1;
     }
 
-    public override void AplicarConsequencia(Vilao vilao)
+    public override void AplicarConsequencia(Monstro monstro)
     {
-        vilao.Dano += 2;
+        monstro.Dano += 2;
     }
 }

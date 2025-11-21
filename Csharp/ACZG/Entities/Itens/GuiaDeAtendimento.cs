@@ -18,5 +18,5 @@ public class GuiaDeAtendimento : ItemBatalha
         Console.WriteLine("Guia de Atendimento REMOVIDO.");
     }
 
-    public override void AplicarConsequencia(Vilao vilao) {}
+    public override void AplicarConsequencia(Monstro monstro) {}
 }
