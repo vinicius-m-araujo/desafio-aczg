@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5yJXxoaL51I=",
+  "dgSpecHash": "f8kGscRrjIQ=",
   "success": true,
-  "projectFilePath": "C:\\Dev\\DesafioACZG\\Csharp\\ACZG\\ACZG.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\dev\\ACZG\\desafio-aczg\\Csharp\\ACZG\\ACZG.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Luiza\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.12\\microsoft.netcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Luiza\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.12\\microsoft.windowsdesktop.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Luiza\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.12\\microsoft.aspnetcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Luiza\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.12\\microsoft.netcore.app.host.win-x64.8.0.12.nupkg.sha512"
+  ],
   "logs": []
 }

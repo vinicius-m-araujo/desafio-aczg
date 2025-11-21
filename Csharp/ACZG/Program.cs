@@ -26,7 +26,7 @@ class Program
 
         // 2. Criando os Itens
         var placaPedra = new Faturamentus();
-        var espadinha = new EspadaDeMadeira();
+        var espadinha = new GuiaDeAtendimento();
 
         // 3. Adicionando ao inventário (Necessário para poder equipar)
         meuHeroi.AdicionarItem(placaPedra);
