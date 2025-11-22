@@ -27,18 +27,60 @@ public class SistemaBatalha
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("--- Rodada do Héroi ---");
                 Console.WriteLine($"Sorteia {hotDog.QtdJogadasPorRodada} no intervalo de vida do Monstro [1-{monstro.VidaMaxima}]");
-                NumerosSorteados()
+                var numerosSorteados = ListaNumerosSorteados(hotDog.QtdJogadasPorRodada, monstro.VidaMaxima);
+                if (numerosSorteados.Count == 1)
+                {
+                    Console.WriteLine($"Número Sorteado: [{numerosSorteados}]");
+                }
+                else
+                {
+                    Console.WriteLine($"Números Sorteados =[{string.Join(", ", numerosSorteados)}]");
+                }
+
+                if (SorteadoIgualSecreto(numerosSorteados, monstro.NumeroSecreto))
+                {
+                    int dano = QtdNumeroAparece(numerosSorteados, monstro.NumeroSecreto);
+                    monstro.ReceberDano(monstro.NumeroSecreto, dano);
+                }
             }
         }
+        return true;
     }
 
-    public static List<int> NumerosSorteados(int qtdJogadasPorRodada)
+    public static List<int> ListaNumerosSorteados(int qtdJogadasPorRodada, int vidaMaxima)
     {
         var lista = new List<int>();
-        foreach (var VARIABLE in COLLECTION)
+        
+        for (int i = 0; i < qtdJogadasPorRodada; i++)
         {
-            
+            int numeroSorteado = _random.Next(1, vidaMaxima + 1);
+            lista.Add(numeroSorteado);
         }
-        return 
+        return lista;
+    }
+
+    public static bool SorteadoIgualSecreto(List<int>lista, int numeroSecreto)
+    {
+        int numero = 0;
+        foreach (var a in lista)
+        {
+            if (a == numeroSecreto)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static int QtdNumeroAparece(List<int> lista, int numeroSecreto)
+    {
+        int numeroAparece = 0;
+        foreach (var numeros in lista)
+        {
+            if (numeros == numeroSecreto)
+            {
+                numeroAparece++;
+            }
+        }
+        return numeroAparece;
     }
 } 

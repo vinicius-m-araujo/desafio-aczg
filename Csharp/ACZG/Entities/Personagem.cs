@@ -19,10 +19,14 @@ public abstract class Personagem
         VidaAtual = vidaMaxima;
     }
 
-    public virtual void ReceberDano(int dano)
+    public virtual void ReceberDano(int numeroSecreto, int qtdVezesQueAparece)
     {
+        int dano = numeroSecreto * qtdVezesQueAparece;
         VidaAtual -= dano;
         if(VidaAtual <= 0) VidaAtual = 0;
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($" >>> DANO CONFIRMADO! O monstro perdeu {dano} de vida.");
+        Console.ResetColor();
     }
     
     
@@ -33,5 +37,6 @@ public abstract class Personagem
     {
         NumeroSecreto = numeroSecreto;
     }
+    
     
 }

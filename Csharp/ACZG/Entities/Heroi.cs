@@ -6,7 +6,7 @@ public class Heroi : Personagem
 {
     public List<ItemBatalha> Inventario { get; set; } 
     public ItemBatalha ItemBatalhaEquipado { get; set; }
-    public int QtdJogadasPorRodada { get; set; } = 1;
+    public int QtdJogadasPorRodada { get; set; } = 2;
     public bool ModoBerserker { get; set; } = false;
     
     public Heroi()
