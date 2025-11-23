@@ -16,7 +16,7 @@ public class ViewBase
             string input = Console.ReadLine();
 
             if (input == "1") return 1;
-            if (input == "2") return 2;
+            if (input == "2") FecharPrograma();
             Console.Clear();
         }
     }
@@ -55,10 +55,7 @@ public class ViewBase
 
             if (tecla.Key == ConsoleKey.X)
             {
-                if (ConfirmarDesistencia())
-                {
-                    ExecutarDesistenciaDaMissao();
-                }
+                ConfirmarDesistencia();
             }
         }
 
@@ -72,15 +69,15 @@ public class ViewBase
         Pausar();
     }
 
-    protected bool ConfirmarDesistencia()
+    public void ConfirmarDesistencia()
     {
         while (true)
         {
             EscreverLento("Realmente deseja sair? (S/N)");
             string input = Console.ReadLine()?.ToUpper();
 
-            if (input == "S") return true;
-            if (input == "N") return false;
+            if (input == "S") ExecutarDesistenciaDaMissao();
+            if (input == "N") return;
 
             Console.WriteLine("Opção inválida! Digite apenas S ou N.");
         }

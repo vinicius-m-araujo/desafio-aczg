@@ -10,7 +10,7 @@ public class GuiaDeAtendimento : ItemBatalha
     {
         Console.WriteLine($"[{Nome}] ATIVADO: Você ergue a {Formato}!");
         Console.WriteLine(">> Benefício: Sorteando 4 números de uma só vez para o ataque...");
-        heroi.QtdJogadasPorRodada = 2;
+        heroi.QtdJogadasPorRodada = 4;
     }
 
     public override void RemoverBeneficio(Heroi heroi)

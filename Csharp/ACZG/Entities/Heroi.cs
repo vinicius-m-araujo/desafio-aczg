@@ -4,9 +4,9 @@ namespace ACZG.Entities;
 
 public class Heroi : Personagem
 {
-    public List<ItemBatalha> Inventario { get; set; } 
+    public List<ItemBatalha> Inventario { get; set; } = new List<ItemBatalha>();
     public ItemBatalha ItemBatalhaEquipado { get; set; }
-    public int QtdJogadasPorRodada { get; set; } = 2;
+    public int QtdJogadasPorRodada { get; set; } = 1;
     public bool ModoBerserker { get; set; } = false;
     
     public Heroi()
@@ -14,7 +14,7 @@ public class Heroi : Personagem
         Nome = "Hot Dog";
         VidaMaxima = 5;
         VidaAtual = 5;
-        Inventario = new List<ItemBatalha> { new EspadaSimples() };
+        ItemBatalhaEquipado = new EspadaSimples();
     }
 
     public void AumentarVidaMaxima(int bonus)
@@ -56,5 +56,37 @@ public class Heroi : Personagem
         Inventario.Remove(novoItemBatalha);
         Console.WriteLine("Item equipado com sucesso!");
         novoItemBatalha.AtivarBeneficio(this);
+    }
+
+    public void AbrirInventario()
+    {
+        Console.Clear();
+        Console.WriteLine($"Item equipado: {ItemBatalhaEquipado.Nome}");
+        Console.WriteLine("Itens no inventário: ");
+        for (int i = 0; i < Inventario.Count; i++)
+        {
+            Console.WriteLine($"[{i + 1}] {Inventario[i].Nome}]");
+        }
+        Console.WriteLine("[0] Manter item atual");
+        
+        string entrada = Console.ReadLine();
+
+        if (int.TryParse(entrada, out int escolha))
+        {
+            if (escolha == 0)
+                return;
+            
+            int indice = escolha - 1;
+
+            if (indice>= 0 && indice < Inventario.Count)
+            {
+                var itemBatalha = Inventario[indice];
+                TrocarItem(itemBatalha);
+
+                return;
+            }
+        }
+        
+        Console.WriteLine("Opção inválida.");
     }
 }
