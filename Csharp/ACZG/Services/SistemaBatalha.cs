@@ -47,7 +47,7 @@ public class SistemaBatalha
                 Console.ReadKey();
             }
         }
-        return true;
+        return hotDog.EstaVivo;
     }
 
     public static List<int> ListaNumerosSorteados(int qtdJogadasPorRodada, int vidaMaxima)
