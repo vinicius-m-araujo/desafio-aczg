@@ -7,70 +7,46 @@ namespace ACZG.Services;
 public class SistemaBatalha
 {
     private static Random _random = new Random();
-    private static bool turnoDoHeroi = true;
     private static ViewBase _view = new ViewBase();
 
     public static bool Lutar(Heroi hotDog, Monstro monstro)
     {
         hotDog.SetarNumeroSecreto(_random.Next(1, hotDog.VidaMaxima + 1));
         monstro.SetarNumeroSecreto(_random.Next(1, monstro.VidaMaxima + 1));
-        var ultimoItemUsadoPeloHeroi = hotDog.ItemBatalhaEquipado;
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"INICIO DE COMBATE: {hotDog.Nome} vs {monstro.Nome} \n" +
-                          $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada} \n" +
-                          $"Herói = {hotDog.VidaMaxima} vida | Quantidade de números sorteador por rodada = {hotDog.QtdJogadasPorRodada}");
 
-        while (hotDog.EstaVivo &&  monstro.EstaVivo)
+        bool turnoDoHeroi = true;
+        var ultimoItemUsadoPeloHeroi = hotDog.ItemBatalhaEquipado;
+        ImprimirCabecalho(hotDog, monstro);
+
+        while (hotDog.EstaVivo && monstro.EstaVivo)
         {
             if (turnoDoHeroi)
             {
-                
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("--- Rodada do Héroi ---");
-                Console.WriteLine($"Sorteia {hotDog.QtdJogadasPorRodada} no intervalo de vida do Monstro [1-{monstro.VidaMaxima}]");
-                var numerosSorteados = ListaNumerosSorteados(hotDog.QtdJogadasPorRodada, monstro.VidaMaxima);
-                Console.WriteLine($"Número(s) Sorteado(s): [{string.Join(", ", numerosSorteados)}]");
-
-                if (numerosSorteados.Contains(monstro.NumeroSecreto))
-                {
-                    int qtdAparicoes = numerosSorteados.Count(numero => monstro.NumeroSecreto == numero);
-                    int danoTotal = monstro.NumeroSecreto * qtdAparicoes;
-                    
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Houve dano! O número secreto do Monstro é {monstro.NumeroSecreto} e foi sorteado {qtdAparicoes}x.");
-                    Console.WriteLine($"Cálculo: {monstro.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
-                    monstro.ReceberDano(danoTotal);
-                    Console.WriteLine($"Vida do Monstro: {monstro.VidaAtual}");
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Não houve dano, pois o número secreto do monstro é {monstro.NumeroSecreto} e foi sorteado {string.Join(", ", numerosSorteados)}");
-                }
-                Console.WriteLine("Pressione ENTER para continuar...");
-                Console.WriteLine("Pressione I para Trocar o Item...");
-                Console.WriteLine("Pressione X para desistir da missão...");
-                var tecla = Console.ReadKey(true).Key;
-
-                switch (tecla)
-                {
-                    case ConsoleKey.Enter:
-                        break;
-                    
-                    case ConsoleKey.I:
-                        hotDog.AbrirInventario();
-                        break;
-                    
-                    case ConsoleKey.X:
-                        _view.ConfirmarDesistencia();
-                        break;
-                }
-                
+                ExecutarRodadaDeAtaque(
+                    nomeAtacante: hotDog.Nome,
+                    qtdJogadas: hotDog.QtdJogadasPorRodada,
+                    personagem: monstro,
+                    corTitulo: ConsoleColor.Cyan
+                );
+                if (!ProcessarMenuJogador(hotDog)) return false;
+                turnoDoHeroi = false;
+            }
+            else
+            {
+                ExecutarRodadaDeAtaque(
+                    nomeAtacante: monstro.Nome,
+                    qtdJogadas: monstro.QtdJogadasPorRodada,
+                    personagem: hotDog,
+                    corTitulo: ConsoleColor.Yellow
+                );
                 turnoDoHeroi = true;
             }
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            
+
+            if (turnoDoHeroi)
+            {
+                Console.WriteLine("Fim do turno do monstro. Pressione qualquer tecla para continuar.");
+                Console.ReadKey();
+            }
         }
         return true;
     }
@@ -78,13 +54,79 @@ public class SistemaBatalha
     public static List<int> ListaNumerosSorteados(int qtdJogadasPorRodada, int vidaMaxima)
     {
         var lista = new List<int>();
-        
+
         for (int i = 0; i < qtdJogadasPorRodada; i++)
         {
             int numeroSorteado = _random.Next(1, vidaMaxima + 1);
             lista.Add(numeroSorteado);
         }
+
         return lista;
     }
-    
-} 
+
+    public static void ImprimirCabecalho(Heroi heroi, Monstro monstro)
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"INICIO DE COMBATE: {heroi.Nome} vs {monstro.Nome} \n" +
+                          $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada} \n" +
+                          $"Herói = {heroi.VidaMaxima} vida | Quantidade de números sorteador por rodada = {heroi.QtdJogadasPorRodada}");
+        Console.ReadKey();
+        Console.WriteLine();
+    }
+
+    public static void ExecutarRodadaDeAtaque(
+        string nomeAtacante,
+        int qtdJogadas,
+        Personagem personagem,
+        ConsoleColor corTitulo)
+    {
+        Console.Clear();  
+        Console.ForegroundColor = corTitulo;
+        Console.WriteLine($"--- Rodada do {nomeAtacante} ---");
+        Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {personagem.Nome} [1 {personagem.VidaMaxima}]");
+        
+        var numeroSorteados = ListaNumerosSorteados(qtdJogadas, personagem.VidaMaxima);
+        Console.ResetColor();
+        if (numeroSorteados.Contains(personagem.NumeroSecreto))
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            int qtdAparicoes = numeroSorteados.Count(numero => numero == personagem.NumeroSecreto);
+            int danoTotal = personagem.NumeroSecreto * qtdAparicoes;
+            personagem.ReceberDano(danoTotal);
+
+            Console.WriteLine($"Houve dano! O número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado {qtdAparicoes}x.");
+            Console.WriteLine($"Cálculo: {personagem.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
+            Console.WriteLine($"Vida do {personagem.Nome}: [{personagem.VidaAtual}]");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Não houve dano, pois o número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado" +
+                              $" {string.Join(",", numeroSorteados)}");
+        }
+    }
+
+    private static bool ProcessarMenuJogador(Heroi heroi)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("Pressione ENTER para continuar...");
+        Console.WriteLine("Pressione I para Trocar o Item...");
+        Console.WriteLine("Pressione X para desistir da missão...");
+        var tecla = Console.ReadKey(true).Key;
+
+        switch (tecla)
+        {
+            case ConsoleKey.I:
+                heroi.AbrirInventario();
+                break;
+            case ConsoleKey.X:
+                _view.ConfirmarDesistencia();
+                return false;
+            case ConsoleKey.Enter:
+            default:
+                break;
+        }
+        return true;
+    }
+}
