@@ -9,13 +9,12 @@ public class SistemaBatalha
     private static Random _random = new Random();
     private static ViewBase _view = new ViewBase();
 
-    public static bool Lutar(Heroi hotDog, Monstro monstro)
+    public bool Lutar(Heroi hotDog, Monstro monstro)
     {
         hotDog.SetarNumeroSecreto(_random.Next(1, hotDog.VidaMaxima + 1));
         monstro.SetarNumeroSecreto(_random.Next(1, monstro.VidaMaxima + 1));
 
         bool turnoDoHeroi = true;
-        var ultimoItemUsadoPeloHeroi = hotDog.ItemBatalhaEquipado;
         ImprimirCabecalho(hotDog, monstro);
 
         while (hotDog.EstaVivo && monstro.EstaVivo)
@@ -98,12 +97,14 @@ public class SistemaBatalha
             Console.WriteLine($"Houve dano! O número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado {qtdAparicoes}x.");
             Console.WriteLine($"Cálculo: {personagem.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
             Console.WriteLine($"Vida do {personagem.Nome}: [{personagem.VidaAtual}]");
+            Console.ResetColor();
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Não houve dano, pois o número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado" +
                               $" {string.Join(",", numeroSorteados)}");
+            Console.ResetColor();
         }
     }
 
@@ -127,6 +128,7 @@ public class SistemaBatalha
             default:
                 break;
         }
+        Console.ResetColor();
         return true;
     }
 }
