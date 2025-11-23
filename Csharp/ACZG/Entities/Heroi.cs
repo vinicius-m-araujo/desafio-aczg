@@ -4,7 +4,7 @@ namespace ACZG.Entities;
 
 public class Heroi : Personagem
 {
-    public List<ItemBatalha> Inventario { get; set; } = new List<ItemBatalha>();
+    public List<ItemBatalha> Inventario { get; } = new List<ItemBatalha>();
     public ItemBatalha ItemBatalhaEquipado { get; set; }
     public int QtdJogadasPorRodada { get; set; } = 1;
     public bool ModoBerserker { get; set; } = false;
@@ -33,9 +33,16 @@ public class Heroi : Personagem
         Inventario.Add(itemBatalha);
     }
     
-    public void PagarComVida(int vida)
+    public void PagarComVida(int custo)
     {
-        if(VidaAtual > vida) VidaAtual -= vida;
+        if(VidaAtual > custo) 
+        {
+            VidaAtual -= custo;
+        }
+        else
+        {
+            Console.WriteLine("Você não tem vitalidade suficiente para este sacrifício!");
+        }    
     }
 
     public void TrocarItem(ItemBatalha novoItemBatalha)

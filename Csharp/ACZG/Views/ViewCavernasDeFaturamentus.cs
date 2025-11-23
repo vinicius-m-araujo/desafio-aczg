@@ -10,16 +10,17 @@ public class ViewCavernasDeFaturamentus : ViewBase
         
         ExibirNarrativa("Explorando a caverna com uma tocha, Hot Dog ouve sons metálicos ao longe." +
                         " Ao alcançar uma área iluminada por minérios misteriosos, encontra três caminhos e um enigma indicando a pista para a escolha certa:");
-        
-        ExibirNarrativa("Do enfermo vem o início, do registro o meio, do pagamento o fim do anseio. " +
-                        "Gira sem parar nos salões do curar — que ciclo é esse a sustentar?\n" +
-                        "A) O Ciclum Receitatus Hospitalis\n" +
-                        "B) O Rito dos Curandeiros Eternos\n" +
-                        "C) A Roda da Vida e da Cura");
-        
-        
     }
 
+    public void IniciarLuta()
+    {
+        ExibirNarrativa("Hot Dog alcança um novo local, onde os Anciões do Faturamento trabalham sem dar atenção aos arredores. \n " +
+                        "De repente, ele encontra o monstro da caverna — um cavaleiro infernal forjado por Glozium, afiando sua espada.");
+        ExibirNarrativa("Glozium Administratus - você é o herói deste ano? não me parece grande coisa. \n" +
+                        "Não sou muito de conversa, venha lutar, irei te fatiar e servir pros lacaios de meu mestre!");
+        ExibirNarrativa("Hot Dog - algumas piadas ruins podem até me fazer rir, você é uma dessas, hahaha… se prepare!");
+    }
+    
     public void MostrarCenaVitoria()
     {
         ExibirNarrativa("Ansião faturador - muito obrigado, mas tô ocupado demais para agradecimentos longos, tome o artefato sagrado e siga em frente ");

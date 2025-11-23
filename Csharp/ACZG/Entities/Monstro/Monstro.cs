@@ -8,4 +8,9 @@ public class Monstro : Personagem
     {
         QtdJogadasPorRodada = qtdJogadasPorRodada;
     }
+    public void AumentarVidaMaxima(int bonus)
+    {
+        VidaMaxima += bonus;
+        VidaAtual += bonus;
+    }
 }

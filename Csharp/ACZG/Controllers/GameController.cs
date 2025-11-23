@@ -6,46 +6,70 @@ namespace ACZG.Controllers;
 public class GameController
 {
     private Heroi _heroi;
-    private SistemaBatalha  _sistema;
+    private SistemaBatalha _sistema;
     private FlorestaController _floresta = new FlorestaController();
+    private CavernaController _caverna = new CavernaController();
 
-    
-    public GameController()
-    {
-        _heroi = new Heroi();
-    }
 
     public void Start()
     {
-        while (_heroi.EstaVivo && _heroi.Inventario.Count < 5)
-        {
-            Console.WriteLine("\n--- 🧭 ONDE IR? ---");
-            Console.WriteLine($"Vida: {_heroi.VidaAtual}/{_heroi.VidaMaxima} | Itens Coletados: {_heroi.Inventario.Count}/4");
-            Console.WriteLine("1. Floresta do Atendimentus (Região 1)");
-            Console.WriteLine("2. Cavernas de Faturamentus (Região 2)");
-            Console.WriteLine("3. Vila da Transmissão (Região 3)");
-            Console.WriteLine("4. Torre de Contas a Receber (Região 4 - Chefe Final)");
-            Console.WriteLine("5. Forjar Espada ZG (Em Hospitalis)");
-            Console.WriteLine("6. Loja de itens");
-            
-            if (_heroi.Inventario.Any(item => item.Nome == "Pearl of the Send"))
-                Console.WriteLine("7. Usar Pearl of the Send e ir direto para Glozium!");
-            
-            string escolha = Console.ReadLine();
+        bool jogando = true;
 
-            switch (escolha)
+        while (jogando)
+        {
+            _heroi = new Heroi();
+            Console.Clear();
+            while (_heroi.EstaVivo && _heroi.Inventario.Count < 5)
             {
-                case "1":
-                    _floresta.IniciarLutaFloresta(_heroi);
-                    break;
+                Console.WriteLine("\n--- 🧭 ONDE IR? ---");
+                Console.WriteLine(
+                    $"Vida: {_heroi.VidaAtual}/{_heroi.VidaMaxima} | Itens Coletados: {_heroi.Inventario.Count}/4");
+                Console.WriteLine("1. Floresta do Atendimentus (Região 1)");
+                Console.WriteLine("2. Cavernas de Faturamentus (Região 2)");
+                Console.WriteLine("3. Vila da Transmissão (Região 3)");
+                Console.WriteLine("4. Torre de Contas a Receber (Região 4 - Chefe Final)");
+                Console.WriteLine("5. Forjar Espada ZG (Em Hospitalis)");
+                Console.WriteLine("6. Loja de itens");
+                if (_heroi.Inventario.Any(item => item.Nome == "Pearl of the Send"))
+                    Console.WriteLine("7. Usar Pearl of the Send e ir direto para Glozium!");
+                Console.WriteLine();
+                string escolha = Console.ReadLine();
+
+                switch (escolha)
+                {
+                    case "1":
+                        _floresta.IniciarLutaFloresta(_heroi);
+                        break;
+
+                    case "2":
+                        _caverna.IniciarLutaCaverna(_heroi);
+                        break;
+
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+
+                    default:
+                        Console.WriteLine("Escolha um número correto.");
+                        break;
+                }
+            }
+            if (!_heroi.EstaVivo)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("GAME OVER! O herói caiu em combate.");
+                Console.ResetColor();
                 
-                case "2":
-                    Environment.Exit(0);
-                    break;
-                default:
-                    Console.WriteLine("Escolha um número correto.");
-                    break;
+                Console.WriteLine("Deseja jogar novamente? [S/N]");
+                string resposta = Console.ReadLine().ToUpper();
+
+                if (resposta == "N")
+                {
+                    jogando = false; 
+                    Console.WriteLine("Obrigado por jogar!");
+                }
             }
         }
     }
 }
+

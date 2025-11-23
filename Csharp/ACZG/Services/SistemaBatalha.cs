@@ -68,8 +68,10 @@ public class SistemaBatalha
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"INICIO DE COMBATE: {heroi.Nome} vs {monstro.Nome} \n" +
-                          $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada} \n" +
-                          $"Herói = {heroi.VidaMaxima} vida | Quantidade de números sorteador por rodada = {heroi.QtdJogadasPorRodada}");
+                          $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada}" +
+                          $" | Número secreto = {monstro.NumeroSecreto} \n" +
+                          $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteador por rodada = {heroi.QtdJogadasPorRodada}" +
+                          $" | Número secreto = {heroi.NumeroSecreto}");
         Console.ReadKey();
         Console.WriteLine();
     }
@@ -83,7 +85,7 @@ public class SistemaBatalha
         Console.Clear();  
         Console.ForegroundColor = corTitulo;
         Console.WriteLine($"--- Rodada do {nomeAtacante} ---");
-        Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {personagem.Nome} [1 {personagem.VidaMaxima}]");
+        Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {personagem.Nome} [1-{personagem.VidaMaxima}]");
         
         var numeroSorteados = ListaNumerosSorteados(qtdJogadas, personagem.VidaMaxima);
         Console.ResetColor();
@@ -94,7 +96,8 @@ public class SistemaBatalha
             int danoTotal = personagem.NumeroSecreto * qtdAparicoes;
             personagem.ReceberDano(danoTotal);
 
-            Console.WriteLine($"Houve dano! O número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado {qtdAparicoes}x.");
+            Console.WriteLine($"Houve dano! O número secreto do {personagem.Nome} é {personagem.NumeroSecreto}" +
+                              $" e foi sorteado {string.Join(", ", numeroSorteados)}.");
             Console.WriteLine($"Cálculo: {personagem.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
             Console.WriteLine($"Vida do {personagem.Nome}: [{personagem.VidaAtual}]");
             Console.ResetColor();

@@ -18,7 +18,7 @@ public class ViewFlorestaDoAtendimentus : ViewBase
                         "algo e começa a correr, o herói o segue pois confia totalmente em seu querido animal");
 
         ExibirNarrativa(
-            "mergulhando nos arbustos de espinhos que rasgavam a pele, eles correm até um campo limpo e se deparam com algo terrível…");
+            "Mergulhando nos arbustos de espinhos que rasgavam a pele, eles correm até um campo limpo e se deparam com algo terrível…");
 
         ExibirNarrativa(
             "Processus estava morto, caído aos pés de uma criatura humanoide com um olhar nojento e arrogante, como um demônio:");
