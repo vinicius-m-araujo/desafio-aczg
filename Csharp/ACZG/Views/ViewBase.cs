@@ -2,24 +2,6 @@
 
 public class ViewBase
 {
-    public int ExibirMenuInicial()
-    {
-        while (true)
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            EscreverLento("=== ACZG RPG: A JORNADA DE HOT DOG ===");
-            Console.ResetColor();
-            Console.WriteLine("1. Iniciar Jornada");
-            Console.WriteLine("2. Sair");
-            Console.Write("Escolha uma opção: ");
-            string input = Console.ReadLine();
-
-            if (input == "1") return 1;
-            if (input == "2") FecharPrograma();
-            Console.Clear();
-        }
-    }
 
     public void EscreverLento(string texto, int delay = 50)
     {
@@ -55,7 +37,6 @@ public class ViewBase
 
             if (tecla.Key == ConsoleKey.X)
             {
-                ConfirmarDesistencia();
             }
         }
 
@@ -68,29 +49,7 @@ public class ViewBase
         EscreverLento(texto);
         Pausar();
     }
-
-    public void ConfirmarDesistencia()
-    {
-        while (true)
-        {
-            EscreverLento("Realmente deseja sair? (S/N)");
-            string input = Console.ReadLine()?.ToUpper();
-
-            if (input == "S") ExecutarDesistenciaDaMissao();
-            if (input == "N") return;
-
-            Console.WriteLine("Opção inválida! Digite apenas S ou N.");
-        }
-    }
-
-    public void ExecutarDesistenciaDaMissao()
-    {
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Red;
-        EscreverLento("Você desistiu da missão.");
-        Console.ResetColor();
-        ExibirMenuInicial();
-    }
+    
     public void FecharPrograma()
     {
         Console.Clear();

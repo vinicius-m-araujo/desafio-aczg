@@ -18,7 +18,7 @@ public class EspadaSimples : ItemBatalha
     public override void RemoverBeneficio(Heroi heroi)
     {
     }
-    public override void AplicarConsequencia(Monstro monstro)
+    public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
     {
     }
 }

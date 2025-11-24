@@ -1,6 +1,7 @@
 ﻿using ACZG.Entities;
 using ACZG.Entities.Itens;
 using ACZG.Entities.Vilao;
+using ACZG.Enums;
 using ACZG.Services;
 using ACZG.Views;
 
@@ -22,29 +23,23 @@ public class CavernaController
 
         _view.IniciarFase();
 
-        var monstro = new Monstro("Glozium Administratus", 6, 2);
+        var monstro = new Monstro("Glozium Administratus", 6g4, 2);
         
         ProcessarEnigma(heroi, monstro);
-
-        if (!heroi.EstaVivo)
-        {
-            _view.MostrarCenaDerrota();
-            return false;
-        }
         
-        _view.IniciarLuta();
+        var resultado = _sistemaBatalha.Lutar(heroi, monstro);
 
-        bool vitoria = _sistemaBatalha.Lutar(heroi, monstro);
-        if (vitoria)
+        if (resultado ==  ResultadoBatalha.Vitoria)
         {
             _view.MostrarCenaVitoria();
             var item = new Faturamentus();
-            heroi.AdicionarItem(item);
-
-            heroi.AumentarVidaMaxima(5);
             return true;
         }
 
+        if (resultado == ResultadoBatalha.Desistencia)
+        {
+            return true;
+        }
         _view.MostrarCenaDerrota();
         return false;
     }

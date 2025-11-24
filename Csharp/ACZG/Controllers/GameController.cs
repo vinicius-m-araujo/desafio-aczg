@@ -1,4 +1,5 @@
 ﻿using ACZG.Entities;
+using ACZG.Entities.Itens;
 using ACZG.Services;
 
 namespace ACZG.Controllers;
@@ -21,7 +22,8 @@ public class GameController
             Console.Clear();
             while (_heroi.EstaVivo && _heroi.Inventario.Count < 5)
             {
-                Console.WriteLine("\n--- 🧭 ONDE IR? ---");
+                Console.ResetColor();
+                Console.WriteLine("---  ONDE IR? ---");
                 Console.WriteLine(
                     $"Vida: {_heroi.VidaAtual}/{_heroi.VidaMaxima} | Itens Coletados: {_heroi.Inventario.Count}/4");
                 Console.WriteLine("1. Floresta do Atendimentus (Região 1)");
@@ -30,8 +32,9 @@ public class GameController
                 Console.WriteLine("4. Torre de Contas a Receber (Região 4 - Chefe Final)");
                 Console.WriteLine("5. Forjar Espada ZG (Em Hospitalis)");
                 Console.WriteLine("6. Loja de itens");
+                Console.WriteLine("7. Abrir inventário");
                 if (_heroi.Inventario.Any(item => item.Nome == "Pearl of the Send"))
-                    Console.WriteLine("7. Usar Pearl of the Send e ir direto para Glozium!");
+                    Console.WriteLine("8. Usar Pearl of the Send e ir direto para Glozium!");
                 Console.WriteLine();
                 string escolha = Console.ReadLine();
 
@@ -47,6 +50,10 @@ public class GameController
 
                     case "3":
                         Environment.Exit(0);
+                        break;
+                    
+                    case "7":
+                        _heroi.AbrirInventario();
                         break;
 
                     default:
@@ -67,6 +74,8 @@ public class GameController
                 {
                     jogando = false; 
                     Console.WriteLine("Obrigado por jogar!");
+                    Console.ReadKey();
+                    Environment.Exit(0);
                 }
             }
         }

@@ -10,9 +10,10 @@ class Program
     public static void Main(string[] args)
     {
         Console.Title = "Teste de Batalha RPG";
-
+        
         var game = new GameController();
         game.Start();
+        
 
     }
 }

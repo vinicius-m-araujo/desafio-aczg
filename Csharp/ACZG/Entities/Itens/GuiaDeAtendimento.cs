@@ -9,8 +9,8 @@ public class GuiaDeAtendimento : ItemBatalha
     public override void AtivarBeneficio(Heroi heroi)
     {
         Console.WriteLine($"[{Nome}] ATIVADO: Você ergue a {Formato}!");
-        Console.WriteLine(">> Benefício: Sorteando 4 números de uma só vez para o ataque...");
-        heroi.QtdJogadasPorRodada = 4;
+        Console.WriteLine(">> Benefício: Sorteando 2 números de uma só vez para o ataque...");
+        heroi.QtdJogadasPorRodada = 2;
     }
 
     public override void RemoverBeneficio(Heroi heroi)
@@ -18,5 +18,9 @@ public class GuiaDeAtendimento : ItemBatalha
         Console.WriteLine("Guia de Atendimento REMOVIDO.");
     }
 
-    public override void AplicarConsequencia(Monstro monstro) {}
+    public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
+    {
+        throw new NotImplementedException();
+    }
+
 }

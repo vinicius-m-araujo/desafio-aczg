@@ -20,8 +20,12 @@ public class Faturamentus : ItemBatalha
         heroi.QtdJogadasPorRodada = 1;
     }
 
-    public override void AplicarConsequencia(Monstro monstro)
+    public override void AplicarConsequencia(Heroi heroi,Monstro monstro, bool errouAtaque)
     {
-        monstro.Dano += 2;
+        if (errouAtaque)
+        {
+            monstro.DanoTemporario += 2;
+            Console.WriteLine("Faturamentus pesou! O Monstro ficou mais forte na próxima rodada");
+        }
     }
 }

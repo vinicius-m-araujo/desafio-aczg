@@ -6,6 +6,7 @@ public class Heroi : Personagem
 {
     public List<ItemBatalha> Inventario { get; } = new List<ItemBatalha>();
     public ItemBatalha ItemBatalhaEquipado { get; set; }
+    public ItemBatalha Salsichinha { get; set; }
     public int QtdJogadasPorRodada { get; set; } = 1;
     public bool ModoBerserker { get; set; } = false;
     
@@ -15,6 +16,8 @@ public class Heroi : Personagem
         VidaMaxima = 5;
         VidaAtual = 5;
         ItemBatalhaEquipado = new EspadaSimples();
+        Salsichinha = new Salsichinha();
+        PetAtivo = true;
     }
 
     public void AumentarVidaMaxima(int bonus)
@@ -61,21 +64,22 @@ public class Heroi : Personagem
         }
         ItemBatalhaEquipado = novoItemBatalha;
         Inventario.Remove(novoItemBatalha);
-        Console.WriteLine("Item equipado com sucesso!");
+        Console.WriteLine($"Item equipado com sucesso! {novoItemBatalha.Nome}");
         novoItemBatalha.AtivarBeneficio(this);
     }
 
     public void AbrirInventario()
     {
         Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine($"Item equipado: {ItemBatalhaEquipado.Nome}");
         Console.WriteLine("Itens no inventário: ");
         for (int i = 0; i < Inventario.Count; i++)
         {
-            Console.WriteLine($"[{i + 1}] {Inventario[i].Nome}]");
+            Console.WriteLine($"[{i + 1}] [{Inventario[i].Nome}]");
         }
         Console.WriteLine("[0] Manter item atual");
-        
+        Console.WriteLine();
         string entrada = Console.ReadLine();
 
         if (int.TryParse(entrada, out int escolha))
@@ -89,11 +93,14 @@ public class Heroi : Personagem
             {
                 var itemBatalha = Inventario[indice];
                 TrocarItem(itemBatalha);
-
+                Console.ReadKey();
                 return;
             }
         }
         
         Console.WriteLine("Opção inválida.");
+        
+        Console.ResetColor();
+        Console.ReadKey();
     }
 }

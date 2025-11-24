@@ -1,5 +1,6 @@
 ﻿using ACZG.Entities;
 using ACZG.Entities.Vilao;
+using ACZG.Enums;
 using ACZG.Views;
 
 namespace ACZG.Services;
@@ -7,9 +8,8 @@ namespace ACZG.Services;
 public class SistemaBatalha
 {
     private static Random _random = new Random();
-    private static ViewBase _view = new ViewBase();
 
-    public bool Lutar(Heroi hotDog, Monstro monstro)
+    public ResultadoBatalha Lutar(Heroi hotDog, Monstro monstro)
     {
         hotDog.SetarNumeroSecreto(_random.Next(1, hotDog.VidaMaxima + 1));
         monstro.SetarNumeroSecreto(_random.Next(1, monstro.VidaMaxima + 1));
@@ -22,20 +22,20 @@ public class SistemaBatalha
             if (turnoDoHeroi)
             {
                 ExecutarRodadaDeAtaque(
-                    nomeAtacante: hotDog.Nome,
+                    atacante: hotDog,
                     qtdJogadas: hotDog.QtdJogadasPorRodada,
-                    personagem: monstro,
+                    alvo: monstro,
                     corTitulo: ConsoleColor.Cyan
                 );
-                if (!ProcessarMenuJogador(hotDog)) return false;
+                if (!ProcessarMenuJogador(hotDog)) return ResultadoBatalha.Desistencia;
                 turnoDoHeroi = false;
             }
             else
             {
                 ExecutarRodadaDeAtaque(
-                    nomeAtacante: monstro.Nome,
+                    atacante: monstro,
                     qtdJogadas: monstro.QtdJogadasPorRodada,
-                    personagem: hotDog,
+                    alvo: hotDog,
                     corTitulo: ConsoleColor.Yellow
                 );
                 turnoDoHeroi = true;
@@ -47,7 +47,7 @@ public class SistemaBatalha
                 Console.ReadKey();
             }
         }
-        return hotDog.EstaVivo;
+        return hotDog.EstaVivo ?  ResultadoBatalha.Vitoria : ResultadoBatalha.Derrota;
     }
 
     public static List<int> ListaNumerosSorteados(int qtdJogadasPorRodada, int vidaMaxima)
@@ -77,37 +77,67 @@ public class SistemaBatalha
     }
 
     public static void ExecutarRodadaDeAtaque(
-        string nomeAtacante,
+        Personagem atacante,
         int qtdJogadas,
-        Personagem personagem,
+        Personagem alvo,
         ConsoleColor corTitulo)
     {
         Console.Clear();  
         Console.ForegroundColor = corTitulo;
-        Console.WriteLine($"--- Rodada do {nomeAtacante} ---");
-        Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {personagem.Nome} [1-{personagem.VidaMaxima}]");
+        Console.WriteLine($"--- Rodada do {atacante.Nome} ---");
+        Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {alvo.Nome} [1-{alvo.VidaMaxima}]");
         
-        var numeroSorteados = ListaNumerosSorteados(qtdJogadas, personagem.VidaMaxima);
+        var numeroSorteados = ListaNumerosSorteados(qtdJogadas, alvo.VidaMaxima);
         Console.ResetColor();
-        if (numeroSorteados.Contains(personagem.NumeroSecreto))
+        if (numeroSorteados.Contains(alvo.NumeroSecreto))
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int qtdAparicoes = numeroSorteados.Count(numero => numero == personagem.NumeroSecreto);
-            int danoTotal = personagem.NumeroSecreto * qtdAparicoes;
-            personagem.ReceberDano(danoTotal);
+            int qtdAparicoes = numeroSorteados.Count(numero => numero == alvo.NumeroSecreto);
+            int danoTotal = alvo.NumeroSecreto * qtdAparicoes;
+            if (atacante.PetAtivo)
+            {
+                danoTotal += 1;
+                Console.WriteLine($"Salsichinha morde o {alvo.Nome} ferozmente!! Causando mais 1 de dano");
+            }
 
-            Console.WriteLine($"Houve dano! O número secreto do {personagem.Nome} é {personagem.NumeroSecreto}" +
+            if (atacante is Monstro monstroAtacante)
+            {
+                if (monstroAtacante.DanoTemporario > 0)
+                {
+                    danoTotal += monstroAtacante.DanoTemporario;
+                    Console.WriteLine($"O monstro usou força acumulada! {monstroAtacante.DanoTemporario}");
+                    monstroAtacante.DanoTemporario = 0;
+                }
+            }
+            alvo.ReceberDano(danoTotal);
+
+            Console.WriteLine($"Houve dano! O número secreto do {alvo.Nome} é {alvo.NumeroSecreto}" +
                               $" e foi sorteado {string.Join(", ", numeroSorteados)}.");
-            Console.WriteLine($"Cálculo: {personagem.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
-            Console.WriteLine($"Vida do {personagem.Nome}: [{personagem.VidaAtual}]");
+            Console.WriteLine($"Cálculo: {alvo.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
+            Console.WriteLine($"Vida do {alvo.Nome}: [{alvo.VidaAtual}]");
             Console.ResetColor();
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Não houve dano, pois o número secreto do {personagem.Nome} é {personagem.NumeroSecreto} e foi sorteado" +
+            Console.WriteLine($"Não houve dano, pois o número secreto do {alvo.Nome} é {alvo.NumeroSecreto} e foi sorteado" +
                               $" {string.Join(",", numeroSorteados)}");
+            if (atacante is Monstro monstroQueErrou && monstroQueErrou.DanoTemporario > 0)
+            {
+                Console.WriteLine($"O monstro errou o ataque e desperdiçou sua força acumulada de {monstroQueErrou.DanoTemporario}!");
+                monstroQueErrou.DanoTemporario = 0; 
+            }
+            
             Console.ResetColor();
+            
+            
+            if (atacante is Heroi heroi && heroi.ItemBatalhaEquipado != null)
+            {
+                if (alvo is Monstro monstroAlvo)
+                {
+                    heroi.ItemBatalhaEquipado.AplicarConsequencia(heroi, monstroAlvo, true);
+                }
+            }
         }
     }
 
@@ -125,7 +155,7 @@ public class SistemaBatalha
                 heroi.AbrirInventario();
                 break;
             case ConsoleKey.X:
-                _view.ConfirmarDesistencia();
+                ExecutarDesistenciaDaMissao();
                 return false;
             case ConsoleKey.Enter:
             default:
@@ -133,5 +163,14 @@ public class SistemaBatalha
         }
         Console.ResetColor();
         return true;
+    }
+
+    public static void ExecutarDesistenciaDaMissao()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Você desistiu da missão.");
+        Console.ResetColor();
+        Console.ReadKey();
     }
 }

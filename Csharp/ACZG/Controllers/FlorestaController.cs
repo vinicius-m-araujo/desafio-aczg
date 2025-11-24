@@ -1,5 +1,6 @@
 ﻿using ACZG.Entities;
 using ACZG.Entities.Vilao;
+using ACZG.Enums;
 using ACZG.Services;
 using ACZG.Views;
 
@@ -12,15 +13,18 @@ public class FlorestaController
 
     public bool IniciarLutaFloresta(Heroi heroi)
     {
-        if (heroi.Inventario.Any(item => item.Nome == "Guia de atendimento") || heroi.ItemBatalhaEquipado.Nome ==  "Guia de atendimento" )
+        if (heroi.Inventario.Any(item => item.Nome == "Guia de atendimento") ||
+            heroi.ItemBatalhaEquipado.Nome == "Guia de atendimento")
         {
             Console.WriteLine("Você já venceu essa fase");
             return true;
         }
+
         _florestaView.IniciarFase();
         var monstro = new Monstro("Anti-authorizatus", 3, 1);
-        bool vitoria = _sistemaBatalha.Lutar(heroi, monstro);
-        if (vitoria)
+
+        var resultado = _sistemaBatalha.Lutar(heroi, monstro);
+        if (resultado == ResultadoBatalha.Vitoria)
         {
             _florestaView.MostrarCenaVitoria();
             var item = new GuiaDeAtendimento();
@@ -29,9 +33,13 @@ public class FlorestaController
             heroi.AumentarVidaMaxima(5);
             return true;
         }
-        
+
+        if (resultado == ResultadoBatalha.Desistencia)
+        {
+            return true;
+        }
+
         _florestaView.MostrarCenaDerrota();
         return false;
     }
 }
-

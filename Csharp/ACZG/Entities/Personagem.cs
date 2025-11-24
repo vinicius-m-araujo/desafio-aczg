@@ -6,6 +6,8 @@ public abstract class Personagem
     public int VidaAtual { get; protected set;}
     public int VidaMaxima { get;  protected set; }
     public int NumeroSecreto { get; set; }
+
+    public bool PetAtivo { get; set; } = false;
     
     public int Dano { get; set; }
     
