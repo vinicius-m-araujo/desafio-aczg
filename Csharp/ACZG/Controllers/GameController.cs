@@ -22,6 +22,7 @@ public class GameController
             Console.Clear();
             while (_heroi.EstaVivo && _heroi.Inventario.Count < 5)
             {
+                Console.Clear();
                 Console.ResetColor();
                 Console.WriteLine("---  ONDE IR? ---");
                 Console.WriteLine(
@@ -58,6 +59,7 @@ public class GameController
 
                     default:
                         Console.WriteLine("Escolha um número correto.");
+                        Console.ReadKey();
                         break;
                 }
             }
