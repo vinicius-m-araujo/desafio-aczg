@@ -23,7 +23,7 @@ public class CavernaController
 
         _view.IniciarFase();
 
-        var monstro = new Monstro("Glozium Administratus", 6g4, 2);
+        var monstro = new Monstro("Glozium Administratus", 4, 2);
         
         ProcessarEnigma(heroi, monstro);
         

@@ -20,7 +20,6 @@ public class GuiaDeAtendimento : ItemBatalha
 
     public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
     {
-        throw new NotImplementedException();
     }
 
 }
