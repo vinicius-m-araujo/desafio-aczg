@@ -21,6 +21,7 @@ public class SistemaBatalha
         {
             if (turnoDoHeroi)
             {
+                hotDog.ItemBatalhaEquipado.AtivarBeneficio(hotDog, monstro);
                 ExecutarRodadaDeAtaque(
                     atacante: hotDog,
                     qtdJogadas: hotDog.QtdJogadasPorRodada,

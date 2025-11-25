@@ -16,5 +16,10 @@ public abstract class ItemBatalha
     public abstract void AtivarBeneficio(Heroi heroi);
     public abstract void RemoverBeneficio(Heroi heroi);
     public abstract void AplicarConsequencia(Heroi heroi, Monstro monstro,  bool errouAtaque);
+
+    public virtual void AtivarBeneficio(Heroi heroi, Monstro monstro)
+    {
+        AtivarBeneficio(heroi);
+    }
     
 }

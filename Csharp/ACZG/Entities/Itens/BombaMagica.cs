@@ -5,7 +5,6 @@ namespace ACZG.Entities.Itens;
 public class BombaMagica : ItemBatalha
 {
     private int _errosNaBatalha = 0;
-    public Monstro? Monstro { get; set; }
 
     public BombaMagica() : base("Bomba-mágica", "Bomba")
     {
@@ -13,13 +12,22 @@ public class BombaMagica : ItemBatalha
 
     public override void AtivarBeneficio(Heroi heroi)
     {
-        
-        //heroi.QtdJogadasPorRodada = 
+
+        heroi.QtdJogadasPorRodada = 1;
     }
 
     public override void RemoverBeneficio(Heroi heroi)
     {
         heroi.QtdJogadasPorRodada = 1;
+    }
+
+    public override void AtivarBeneficio(Heroi heroi, Monstro monstro)
+    {
+        int novasJogadas = (int)Math.Floor(monstro.VidaMaxima * 0.8);
+        
+        heroi.QtdJogadasPorRodada = novasJogadas < 1 ? 1 : novasJogadas;
+
+        Console.WriteLine($"[ITEM] Bomba equipada! Alvo: {monstro.Nome}. Jogadas ajustadas para: {heroi.QtdJogadasPorRodada}");
     }
 
     public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
@@ -39,11 +47,5 @@ public class BombaMagica : ItemBatalha
                 Console.WriteLine($"Cuidado! Erros acumulados com a bomba: {_errosNaBatalha}/3");
             }
         }
-    }
-
-    public int CalcularQtdJogadas(int vidaMaximaMonstro)
-    {
-        int jogadas = (int)Math.Round(vidaMaximaMonstro * 0.8);
-        return jogadas;
     }
 }
