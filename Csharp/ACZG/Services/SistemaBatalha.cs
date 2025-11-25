@@ -70,8 +70,9 @@ public class SistemaBatalha
         Console.WriteLine($"INICIO DE COMBATE: {heroi.Nome} vs {monstro.Nome} \n" +
                           $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada}" +
                           $" | Número secreto = {monstro.NumeroSecreto} \n" +
-                          $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteador por rodada = {heroi.QtdJogadasPorRodada}" +
+                          $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteados por rodada = {heroi.QtdJogadasPorRodada}" +
                           $" | Número secreto = {heroi.NumeroSecreto}");
+        ProcessarMenuJogador(heroi);
         Console.ReadKey();
         Console.WriteLine();
     }
