@@ -2,7 +2,7 @@
 
 public abstract class ViewBase
 {
-    public void EscreverLento(string texto, int delay = 50)
+    public void EscreverLento(string texto, int delay = 20)
     {
         for (int i = 0; i < texto.Length; i++)
         {
@@ -53,7 +53,7 @@ public abstract class ViewBase
             EscreverLento(dialogo);
             if (Pausar())
             {
-                Console.WriteLine("Você desistiu da missão");
+                EscreverLento("Você desistiu da missão");
                 Console.ReadKey();
                 return true;
             }

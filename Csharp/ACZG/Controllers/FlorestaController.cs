@@ -20,7 +20,8 @@ public class FlorestaController
             return true;
         }
 
-        _florestaView.IniciarFase();
+        if (_florestaView.IniciarFase()) return true;
+            
         var monstro = new Monstro("Anti-authorizatus", 3, 1);
 
         var resultado = _sistemaBatalha.Lutar(heroi, monstro);
