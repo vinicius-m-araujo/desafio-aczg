@@ -1,8 +1,7 @@
 ﻿namespace ACZG.Views;
 
-public class ViewBase
+public abstract class ViewBase
 {
-
     public void EscreverLento(string texto, int delay = 50)
     {
         for (int i = 0; i < texto.Length; i++)
@@ -14,12 +13,14 @@ public class ViewBase
                 Console.Write(texto.Substring(i + 1));
                 break;
             }
+
             Thread.Sleep(delay);
         }
+
         Console.WriteLine();
     }
 
-    protected void Pausar()
+    protected bool Pausar()
     {
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -32,31 +33,32 @@ public class ViewBase
             var tecla = Console.ReadKey(true);
             if (tecla.Key == ConsoleKey.Enter)
             {
-                break;
+                Console.Clear();
+                return false;
             }
 
             if (tecla.Key == ConsoleKey.X)
             {
+                Console.Clear();
+                return true;
+            }
+        }
+    }
+
+    protected bool ExibirNarrativa(params string[] dialogos)
+    {
+        foreach (var dialogo in dialogos)
+        {
+            Console.Clear();
+            EscreverLento(dialogo);
+            if (Pausar())
+            {
+                Console.WriteLine("Você desistiu da missão");
+                Console.ReadKey();
+                return true;
             }
         }
 
-        Console.Clear();
-    }
-
-    protected void ExibirNarrativa(string texto)
-    {
-        Console.Clear();
-        EscreverLento(texto);
-        Pausar();
-    }
-    
-    public void FecharPrograma()
-    {
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Red;
-        EscreverLento("Você desistiu. O mundo cairá nas trevas de Glozium.. \n" +
-                      "Fechando programa...");
-        Console.ResetColor();
-        Environment.Exit(0);
+        return false;
     }
 }

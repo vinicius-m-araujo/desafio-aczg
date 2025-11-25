@@ -20,12 +20,14 @@ public class CavernaController
             Console.WriteLine("Você já venceu essa fase");
             return true;
         }
-
-        _view.IniciarFase();
+            
+        if(_view.IniciarFase()) return true;
 
         var monstro = new Monstro("Glozium Administratus", 4, 2);
         
         ProcessarEnigma(heroi, monstro);
+        
+        if(_view.IniciarLuta()) return true;
         
         var resultado = _sistemaBatalha.Lutar(heroi, monstro);
 
