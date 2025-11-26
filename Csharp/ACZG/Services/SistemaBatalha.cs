@@ -100,7 +100,8 @@ public class SistemaBatalha
                           $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada}" +
                           $" | Número secreto = {monstro.NumeroSecreto} \n" +
                           $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteados por rodada = {heroi.QtdJogadasPorRodada}" +
-                          $" | Número secreto = {heroi.NumeroSecreto}"); 
+                          $" | Número secreto = {heroi.NumeroSecreto}");
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("Pressione ENTER para continuar...");
         Console.WriteLine("Pressione I para Trocar o Item...");
         Console.WriteLine("Pressione X para desistir da missão...");
@@ -252,7 +253,7 @@ public class SistemaBatalha
 
     private static bool ProcessarMenuJogador(Heroi heroi, Monstro monstroAtual)
     {
-        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("Pressione ENTER para continuar...");
         Console.WriteLine("Pressione I para Trocar o Item...");
         Console.WriteLine("Pressione X para desistir da missão...");
