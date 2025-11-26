@@ -18,6 +18,7 @@ public class VilaController
             heroi.ItemBatalhaEquipado.Nome == "Azah Transmissão")
         {
             Console.WriteLine("Você já venceu essa fase");
+            Console.ReadKey();
             return true;
         }
 
@@ -33,7 +34,6 @@ public class VilaController
             _viewVilaDaTransmissao.MostrarCenaVitoria();
             var item = new AzahTransmissao();
             heroi.AdicionarItem(item);
-
             heroi.AumentarVidaMaxima(5);
             return true;
         }

@@ -17,6 +17,7 @@ public class FlorestaController
             heroi.ItemBatalhaEquipado.Nome == "Guia de atendimento")
         {
             Console.WriteLine("Você já venceu essa fase");
+            Console.ReadKey();
             return true;
         }
 

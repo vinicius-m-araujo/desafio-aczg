@@ -18,6 +18,7 @@ public class CavernaController
             heroi.ItemBatalhaEquipado.Nome == "Faturamentus")
         {
             Console.WriteLine("Você já venceu essa fase");
+            Console.ReadKey();
             return true;
         }
             
@@ -35,6 +36,8 @@ public class CavernaController
         {
             _view.MostrarCenaVitoria();
             var item = new Faturamentus();
+            heroi.AdicionarItem(item);
+            heroi.AumentarVidaMaxima(5);
             return true;
         }
 
