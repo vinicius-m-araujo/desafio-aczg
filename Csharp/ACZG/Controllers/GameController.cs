@@ -10,7 +10,7 @@ public class GameController
     private SistemaBatalha _sistema;
     private FlorestaController _floresta = new FlorestaController();
     private CavernaController _caverna = new CavernaController();
-
+    private VilaController _vila = new VilaController();
 
     public void Start()
     {
@@ -50,6 +50,10 @@ public class GameController
                         break;
 
                     case "3":
+                        _vila.IniciarLutaVila(_heroi);
+                        break;
+                    
+                    case "4":
                         Environment.Exit(0);
                         break;
                     

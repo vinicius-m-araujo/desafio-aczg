@@ -6,12 +6,7 @@ public class ViewVilaDaTransmissao : ViewBase
     {
         return ExibirNarrativa("=== 3. Vila da Transmissão === \n" +
                                "Uma vila mágica que recebe cobranças vindas das cavernas de Faturamentus.\n" +
-                               " Os moradores entregam as mensagens na Torre");
-    }
-
-    public bool IniciarLutar()
-    {
-        return ExibirNarrativa(
+                               " Os moradores entregam as mensagens na Torre",
             "Hot Dog é bem recebido em sua chegada. Ele é convidado para um jantar ritualístico com comidas típicas",
             "Enquanto Salsichinha saboreava um delicioso bife de calango, os moradores contavam a Hot Dog que o monstro a ser enfrentado é um ser que se enterra.",
             " Para atacá-lo, ele terá que desenterrar o monstro e usar sua espada. Então, dão a ele um item a  “Bomba Mágica”",
@@ -23,7 +18,8 @@ public class ViewVilaDaTransmissao : ViewBase
 
     public void MostrarCenaVitoria()
     {
-        ExibirNarrativa("Worm - muito obrigado, todo herói evitava essa batalha e seguia para a torre, agora sou livre!",
+        ExibirNarrativa(
+            "Worm - muito obrigado, todo herói evitava essa batalha e seguia para a torre, agora sou livre!",
             "Hot Dog - evitava? E dá para seguir sem lutar? como assim?",
             "O herói ganha o artefato “Azah Transmissão”");
     }
