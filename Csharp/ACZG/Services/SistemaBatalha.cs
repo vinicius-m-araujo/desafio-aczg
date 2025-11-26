@@ -1,4 +1,5 @@
 ﻿using ACZG.Entities;
+using ACZG.Entities.Itens;
 using ACZG.Entities.Vilao;
 using ACZG.Enums;
 using ACZG.Views;
@@ -21,14 +22,13 @@ public class SistemaBatalha
         {
             if (turnoDoHeroi)
             {
-                hotDog.ItemBatalhaEquipado.AtivarBeneficio(hotDog, monstro);
                 ExecutarRodadaDeAtaque(
                     atacante: hotDog,
                     qtdJogadas: hotDog.QtdJogadasPorRodada,
                     alvo: monstro,
                     corTitulo: ConsoleColor.Cyan
                 );
-                if (!ProcessarMenuJogador(hotDog)) return ResultadoBatalha.Desistencia;
+                if (!ProcessarMenuJogador(hotDog, monstro)) return ResultadoBatalha.Desistencia;
                 turnoDoHeroi = false;
             }
             else
@@ -73,12 +73,12 @@ public class SistemaBatalha
                           $" | Número secreto = {monstro.NumeroSecreto} \n" +
                           $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteados por rodada = {heroi.QtdJogadasPorRodada}" +
                           $" | Número secreto = {heroi.NumeroSecreto}");
-        ProcessarMenuJogador(heroi);
+        ProcessarMenuJogador(heroi, monstro);
         Console.ReadKey();
         Console.WriteLine();
     }
 
-    public static void ExecutarRodadaDeAtaque(
+    public static bool ExecutarRodadaDeAtaque(
         Personagem atacante,
         int qtdJogadas,
         Personagem alvo,
@@ -88,14 +88,43 @@ public class SistemaBatalha
         Console.ForegroundColor = corTitulo;
         Console.WriteLine($"--- Rodada do {atacante.Nome} ---");
         Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {alvo.Nome} [1-{alvo.VidaMaxima}]");
-        
+
         var numeroSorteados = ListaNumerosSorteados(qtdJogadas, alvo.VidaMaxima);
         Console.ResetColor();
+        var hero = atacante is Heroi ? atacante : alvo;
+        Heroi hotDog = (Heroi)hero;
+        var monstroWorm = alvo is Worm ? alvo : atacante;
+        Worm worm = (Worm)monstroWorm;
+        bool personagemAtordoado = false;
+        int numeroParaAcertar = alvo.NumeroSecreto;
+
+
+        if (alvo is Worm && worm.EstaEnterrado)
+        {
+            if (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica)
+            {
+                numeroParaAcertar = worm.NumeroSecretoDinamico;
+                Console.WriteLine($"O Worm está no subsolo! A bomba busca a vibração na posição {numeroParaAcertar}...");
+            }
+            else
+            {
+                Console.WriteLine($"O Ataque falhou! O {alvo.Nome} está enterrado. Use a Bomba Mágica");
+                
+                if(atacante is Heroi && hotDog.ItemBatalhaEquipado != null)
+                    hotDog.ItemBatalhaEquipado.AplicarConsequencia(hotDog, (Monstro)alvo, true);
+
+                Console.ReadKey();
+                return false;
+            }
+        }
+        
+        
         if (numeroSorteados.Contains(alvo.NumeroSecreto))
         {
             Console.ForegroundColor = ConsoleColor.Green;
             int qtdAparicoes = numeroSorteados.Count(numero => numero == alvo.NumeroSecreto);
             int danoTotal = alvo.NumeroSecreto * qtdAparicoes;
+            
             if (atacante.PetAtivo)
             {
                 danoTotal += 1;
@@ -111,6 +140,11 @@ public class SistemaBatalha
                     monstroAtacante.DanoTemporario = 0;
                 }
             }
+
+            if (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica)
+            {
+                danoTotal = 0;
+            }
             alvo.ReceberDano(danoTotal);
 
             Console.WriteLine($"Houve dano! O número secreto do {alvo.Nome} é {alvo.NumeroSecreto}" +
@@ -124,6 +158,12 @@ public class SistemaBatalha
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Não houve dano, pois o número secreto do {alvo.Nome} é {alvo.NumeroSecreto} e foi sorteado" +
                               $" {string.Join(",", numeroSorteados)}");
+            
+            if (alvo is Worm)
+            {
+                Console.WriteLine("Worm está andando pelo subsolo!!");
+                worm.MoverPeloSubSolo();
+            }
             if (atacante is Monstro monstroQueErrou && monstroQueErrou.DanoTemporario > 0)
             {
                 Console.WriteLine($"O monstro errou o ataque e desperdiçou sua força acumulada de {monstroQueErrou.DanoTemporario}!");
@@ -133,17 +173,17 @@ public class SistemaBatalha
             Console.ResetColor();
             
             
-            if (atacante is Heroi heroi && heroi.ItemBatalhaEquipado != null)
+            if (atacante is Heroi)
             {
                 if (alvo is Monstro monstroAlvo)
                 {
-                    heroi.ItemBatalhaEquipado.AplicarConsequencia(heroi, monstroAlvo, true);
+                    hotDog.ItemBatalhaEquipado.AplicarConsequencia(hotDog, monstroAlvo, true);
                 }
             }
         }
     }
 
-    private static bool ProcessarMenuJogador(Heroi heroi)
+    private static bool ProcessarMenuJogador(Heroi heroi, Monstro monstroAtual)
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine("Pressione ENTER para continuar...");
@@ -154,7 +194,7 @@ public class SistemaBatalha
         switch (tecla)
         {
             case ConsoleKey.I:
-                heroi.AbrirInventario();
+                heroi.AbrirInventario(monstroAtual);
                 break;
             case ConsoleKey.X:
                 ExecutarDesistenciaDaMissao();
