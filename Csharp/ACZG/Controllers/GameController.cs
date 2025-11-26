@@ -32,7 +32,6 @@ public class GameController
                 Console.WriteLine("3. Vila da Transmissão (Região 3)");
                 Console.WriteLine("4. Torre de Contas a Receber (Região 4 - Chefe Final)");
                 Console.WriteLine("5. Forjar Espada ZG (Em Hospitalis)");
-                Console.WriteLine("6. Loja de itens");
                 Console.WriteLine("7. Abrir inventário");
                 if (_heroi.Inventario.Any(item => item.Nome == "Pearl of the Send"))
                     Console.WriteLine("8. Usar Pearl of the Send e ir direto para Glozium!");

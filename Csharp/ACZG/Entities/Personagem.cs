@@ -9,7 +9,6 @@ public abstract class Personagem
 
     public bool PetAtivo { get; set; } = false;
     
-    public int Dano { get; set; }
     public bool EstaAtordoado { get; set; } = false;
     
     public Personagem()

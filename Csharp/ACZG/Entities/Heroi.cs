@@ -14,8 +14,8 @@ public class Heroi : Personagem
     public Heroi()
     {
         Nome = "Hot Dog";
-        VidaMaxima = 20;
-        VidaAtual = 20;
+        VidaMaxima = 5;
+        VidaAtual = 5;
         ItemBatalhaEquipado = new EspadaSimples();
         Salsichinha = new Salsichinha();
         PetAtivo = true;

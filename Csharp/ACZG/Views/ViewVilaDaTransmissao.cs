@@ -6,13 +6,13 @@ public class ViewVilaDaTransmissao : ViewBase
     {
         return ExibirNarrativa("=== 3. Vila da Transmissão === \n" +
                                "Uma vila mágica que recebe cobranças vindas das cavernas de Faturamentus.\n" +
-                               " Os moradores entregam as mensagens na Torre",
+                               "Os moradores entregam as mensagens na Torre.",
             "Hot Dog é bem recebido em sua chegada. Ele é convidado para um jantar ritualístico com comidas típicas",
             "Enquanto Salsichinha saboreava um delicioso bife de calango, os moradores contavam a Hot Dog que o monstro a ser enfrentado é um ser que se enterra.",
-            " Para atacá-lo, ele terá que desenterrar o monstro e usar sua espada. Então, dão a ele um item a  “Bomba Mágica”",
+            "Para atacá-lo, ele terá que desenterrar o monstro e usar sua espada. Então, dão a ele um item a  “Bomba Mágica”",
             "Logo, um monstro em forma de verme surge do chão:\n" +
             "worm da transmissão - Você já tem sua arma… fui amigo do guardião dessas terras e transmitia as mensagens à torre após seu falecimento.\n" +
-            " Mas Glozium me tornou seu escravo, sou obrigado a lutar com toda fúria. Assim como foi antes, livre-me do sofrimento…",
+            "Mas Glozium me tornou seu escravo, sou obrigado a lutar com toda fúria. Assim como foi antes, livre-me do sofrimento…",
             "Hot Dog - Você também está preso a um destino que não escolheu, vou te libertar!");
     }
 

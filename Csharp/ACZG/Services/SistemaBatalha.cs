@@ -20,8 +20,9 @@ public class SistemaBatalha
         monstro.SetarNumeroSecreto(_random.Next(1, monstro.VidaMaxima + 1));
 
         bool turnoDoHeroi = true;
-        ImprimirCabecalho(hotDog, monstro);
-
+        bool desistiu = ImprimirCabecalho(hotDog, monstro);
+        if (!desistiu) return ResultadoBatalha.Desistencia;
+        
         while (hotDog.EstaVivo && monstro.EstaVivo)
         {
             if (turnoDoHeroi)
@@ -33,17 +34,20 @@ public class SistemaBatalha
                     turnoDoHeroi = false;
                     continue;
                 }
-
                 ExecutarRodadaDeAtaque(
                     atacante: hotDog,
                     qtdJogadas: hotDog.QtdJogadasPorRodada,
                     alvo: monstro,
                     corTitulo: ConsoleColor.Cyan
                 );
+                if (!ProcessarMenuJogador(hotDog, monstro)){ return ResultadoBatalha.Desistencia;}
 
-                if (!monstro.EstaVivo) break;
+                if (!monstro.EstaVivo)
+                {
+                    Console.ReadKey();
+                    break;
+                }
 
-                if (!ProcessarMenuJogador(hotDog, monstro)) return ResultadoBatalha.Desistencia;
                 turnoDoHeroi = false;
             }
             else
@@ -88,7 +92,7 @@ public class SistemaBatalha
         return lista;
     }
 
-    public static void ImprimirCabecalho(Heroi heroi, Monstro monstro)
+    public static bool ImprimirCabecalho(Heroi heroi, Monstro monstro)
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -96,10 +100,26 @@ public class SistemaBatalha
                           $"Monstro = {monstro.VidaAtual} vida | Quantidade de números sorteados por rodada = {monstro.QtdJogadasPorRodada}" +
                           $" | Número secreto = {monstro.NumeroSecreto} \n" +
                           $"Herói = {heroi.VidaAtual} vida | Quantidade de números sorteados por rodada = {heroi.QtdJogadasPorRodada}" +
-                          $" | Número secreto = {heroi.NumeroSecreto}");
-        ProcessarMenuJogador(heroi, monstro);
-        Console.ReadKey();
+                          $" | Número secreto = {heroi.NumeroSecreto}"); 
+        Console.WriteLine("Pressione ENTER para continuar...");
+        Console.WriteLine("Pressione I para Trocar o Item...");
+        Console.WriteLine("Pressione X para desistir da missão...");
         Console.WriteLine();
+        var tecla = Console.ReadKey(true).Key;
+        switch (tecla)
+        {
+            case ConsoleKey.I:
+                heroi.AbrirInventario(monstro);
+                break;
+            case ConsoleKey.X:
+                ExecutarDesistenciaDaMissao();
+                return false;
+            case ConsoleKey.Enter:
+            default:
+                break;
+        }
+        Console.ResetColor();
+        return true;
     }
 
     //Quando fiz essa função eu e Deus sabíamos como funcionava, agora só ele sabe...
@@ -204,7 +224,7 @@ public class SistemaBatalha
                 $"Não houve dano, pois o número secreto do {alvo.Nome} é {numeroParaAcertar} e foi sorteado" +
                 $" {string.Join(",", numeroSorteados)}");
 
-            if (worm != null)
+            if (worm != null && worm.EstaEnterrado)
             {
                 Console.WriteLine("Worm está andando pelo subsolo!!");
                 worm.MoverPeloSubSolo();
