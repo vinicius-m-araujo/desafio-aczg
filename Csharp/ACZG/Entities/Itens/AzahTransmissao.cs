@@ -15,7 +15,7 @@ public class AzahTransmissao : ItemBatalha
 
     public override void RemoverBeneficio(Heroi heroi)
     {
-        throw new NotImplementedException();
+        heroi.QtdJogadasPorRodada = 1;
     }
 
     public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
