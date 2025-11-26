@@ -10,6 +10,10 @@ public class SistemaBatalha
 {
     private static Random _random = new Random();
 
+    public SistemaBatalha()
+    {
+    }
+
     public ResultadoBatalha Lutar(Heroi hotDog, Monstro monstro)
     {
         hotDog.SetarNumeroSecreto(_random.Next(1, hotDog.VidaMaxima + 1));
@@ -22,17 +26,36 @@ public class SistemaBatalha
         {
             if (turnoDoHeroi)
             {
+                if (hotDog.EstaAtordoado)
+                {
+                    Console.WriteLine("O Herói está atordoado e perdeu a vez");
+                    hotDog.EstaAtordoado = false;
+                    turnoDoHeroi = false;
+                    continue;
+                }
+
                 ExecutarRodadaDeAtaque(
                     atacante: hotDog,
                     qtdJogadas: hotDog.QtdJogadasPorRodada,
                     alvo: monstro,
                     corTitulo: ConsoleColor.Cyan
                 );
+
+                if (!monstro.EstaVivo) break;
+
                 if (!ProcessarMenuJogador(hotDog, monstro)) return ResultadoBatalha.Desistencia;
                 turnoDoHeroi = false;
             }
             else
             {
+                if (monstro.EstaAtordoado)
+                {
+                    Console.WriteLine("O Monstro está atordoado e perdeu a vez!");
+                    monstro.EstaAtordoado = false;
+                    turnoDoHeroi = true;
+                    continue;
+                }
+
                 ExecutarRodadaDeAtaque(
                     atacante: monstro,
                     qtdJogadas: monstro.QtdJogadasPorRodada,
@@ -48,7 +71,8 @@ public class SistemaBatalha
                 Console.ReadKey();
             }
         }
-        return hotDog.EstaVivo ?  ResultadoBatalha.Vitoria : ResultadoBatalha.Derrota;
+
+        return hotDog.EstaVivo ? ResultadoBatalha.Vitoria : ResultadoBatalha.Derrota;
     }
 
     public static List<int> ListaNumerosSorteados(int qtdJogadasPorRodada, int vidaMaxima)
@@ -78,13 +102,14 @@ public class SistemaBatalha
         Console.WriteLine();
     }
 
-    public static bool ExecutarRodadaDeAtaque(
+    //Quando fiz essa função eu e Deus sabíamos como funcionava, agora só ele sabe...
+    public static void ExecutarRodadaDeAtaque(
         Personagem atacante,
         int qtdJogadas,
         Personagem alvo,
         ConsoleColor corTitulo)
     {
-        Console.Clear();  
+        Console.Clear();
         Console.ForegroundColor = corTitulo;
         Console.WriteLine($"--- Rodada do {atacante.Nome} ---");
         Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {alvo.Nome} [1-{alvo.VidaMaxima}]");
@@ -93,86 +118,108 @@ public class SistemaBatalha
         Console.ResetColor();
         var hero = atacante is Heroi ? atacante : alvo;
         Heroi hotDog = (Heroi)hero;
-        var monstroWorm = alvo is Worm ? alvo : atacante;
-        Worm worm = (Worm)monstroWorm;
-        bool personagemAtordoado = false;
+        Worm? worm = alvo as Worm;
         int numeroParaAcertar = alvo.NumeroSecreto;
 
+        bool ataqueComBomba = (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica);
 
-        if (alvo is Worm && worm.EstaEnterrado)
+
+        if (worm != null && worm.EstaEnterrado)
         {
-            if (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica)
+            if (ataqueComBomba)
             {
                 numeroParaAcertar = worm.NumeroSecretoDinamico;
-                Console.WriteLine($"O Worm está no subsolo! A bomba busca a vibração na posição {numeroParaAcertar}...");
+                Console.WriteLine(
+                    $"O Worm está no subsolo! A bomba busca a vibração na posição {numeroParaAcertar}...");
             }
             else
             {
                 Console.WriteLine($"O Ataque falhou! O {alvo.Nome} está enterrado. Use a Bomba Mágica");
-                
-                if(atacante is Heroi && hotDog.ItemBatalhaEquipado != null)
+
+                if (atacante is Heroi)
                     hotDog.ItemBatalhaEquipado.AplicarConsequencia(hotDog, (Monstro)alvo, true);
 
                 Console.ReadKey();
-                return false;
+                return;
             }
         }
-        
-        
-        if (numeroSorteados.Contains(alvo.NumeroSecreto))
+
+
+        if (numeroSorteados.Contains(numeroParaAcertar))
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int qtdAparicoes = numeroSorteados.Count(numero => numero == alvo.NumeroSecreto);
-            int danoTotal = alvo.NumeroSecreto * qtdAparicoes;
-            
-            if (atacante.PetAtivo)
+            int qtdAparicoes = numeroSorteados.Count(numero => numero == numeroParaAcertar);
+            int danoTotal = numeroParaAcertar * qtdAparicoes;
+
+            if (atacante.PetAtivo && !ataqueComBomba)
             {
                 danoTotal += 1;
-                Console.WriteLine($"Salsichinha morde o {alvo.Nome} ferozmente!! Causando mais 1 de dano");
+                Console.WriteLine($"Salsichinha morde o {alvo.Nome} ferozmente!! (+1 dano)");
             }
 
-            if (atacante is Monstro monstroAtacante)
+            if (atacante is Monstro monstroAtacante && monstroAtacante.DanoTemporario > 0)
             {
-                if (monstroAtacante.DanoTemporario > 0)
+                danoTotal += monstroAtacante.DanoTemporario;
+                Console.WriteLine($"O monstro usou força acumulada! {monstroAtacante.DanoTemporario}");
+                monstroAtacante.DanoTemporario = 0;
+            }
+
+            if (ataqueComBomba)
+            {
+                danoTotal = 0;
+                alvo.EstaAtordoado = true;
+                Console.WriteLine("KABOOM! A Bomba Mágica explodiu!");
+                Console.WriteLine($"O impacto atordoou o {alvo.Nome}! (Perde o próximo turno)");
+
+                if (worm != null && worm.EstaEnterrado)
                 {
-                    danoTotal += monstroAtacante.DanoTemporario;
-                    Console.WriteLine($"O monstro usou força acumulada! {monstroAtacante.DanoTemporario}");
-                    monstroAtacante.DanoTemporario = 0;
+                    Console.WriteLine("O impacto expulsou o Worm do subsolo!");
+                    worm.EstaEnterrado = false;
                 }
             }
 
-            if (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica)
-            {
-                danoTotal = 0;
-            }
             alvo.ReceberDano(danoTotal);
-
-            Console.WriteLine($"Houve dano! O número secreto do {alvo.Nome} é {alvo.NumeroSecreto}" +
-                              $" e foi sorteado {string.Join(", ", numeroSorteados)}.");
-            Console.WriteLine($"Cálculo: {alvo.NumeroSecreto} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
-            Console.WriteLine($"Vida do {alvo.Nome}: [{alvo.VidaAtual}]");
-            Console.ResetColor();
+            if (ataqueComBomba)
+            {
+                Console.WriteLine("Dano numérico anulado pela mágica da Bomba.");
+                Console.WriteLine($"O número alvo era {numeroParaAcertar} (Vibração/Secreto)" +
+                                  $" e foi encontrado {qtdAparicoes} vezes: {string.Join(", ", numeroSorteados)}.");
+                Console.WriteLine($"Vida do {alvo.Nome}: [{alvo.VidaAtual}]");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine($"Houve dano! O número secreto do {alvo.Nome} é {numeroParaAcertar}" +
+                                  $" e foi sorteado {string.Join(", ", numeroSorteados)}.");
+                Console.WriteLine(
+                    $"Cálculo: {numeroParaAcertar} (Secreto) * {qtdAparicoes} (Aparições) = {danoTotal} de Dano.");
+                Console.WriteLine($"Vida do {alvo.Nome}: [{alvo.VidaAtual}]");
+                Console.ResetColor();
+            }
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Não houve dano, pois o número secreto do {alvo.Nome} é {alvo.NumeroSecreto} e foi sorteado" +
-                              $" {string.Join(",", numeroSorteados)}");
-            
-            if (alvo is Worm)
+            Console.WriteLine(
+                $"Não houve dano, pois o número secreto do {alvo.Nome} é {numeroParaAcertar} e foi sorteado" +
+                $" {string.Join(",", numeroSorteados)}");
+
+            if (worm != null)
             {
                 Console.WriteLine("Worm está andando pelo subsolo!!");
                 worm.MoverPeloSubSolo();
             }
+
             if (atacante is Monstro monstroQueErrou && monstroQueErrou.DanoTemporario > 0)
             {
-                Console.WriteLine($"O monstro errou o ataque e desperdiçou sua força acumulada de {monstroQueErrou.DanoTemporario}!");
-                monstroQueErrou.DanoTemporario = 0; 
+                Console.WriteLine(
+                    $"O monstro errou o ataque e desperdiçou sua força acumulada de {monstroQueErrou.DanoTemporario}!");
+                monstroQueErrou.DanoTemporario = 0;
             }
-            
+
             Console.ResetColor();
-            
-            
+
+
             if (atacante is Heroi)
             {
                 if (alvo is Monstro monstroAlvo)
@@ -203,6 +250,7 @@ public class SistemaBatalha
             default:
                 break;
         }
+
         Console.ResetColor();
         return true;
     }

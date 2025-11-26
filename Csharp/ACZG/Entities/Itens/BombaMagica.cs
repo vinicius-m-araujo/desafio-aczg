@@ -41,6 +41,7 @@ public class BombaMagica : ItemBatalha
                 Console.WriteLine($"A bomba instável explodiu na sua mão! Você perdeu 2 de vida.");
                 heroi.ReceberDano(2);
                 Console.ResetColor();
+                _errosNaBatalha = 0;
             }
             else
             {
