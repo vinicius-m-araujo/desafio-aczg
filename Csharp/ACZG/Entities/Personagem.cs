@@ -10,6 +10,7 @@ public abstract class Personagem
     public bool PetAtivo { get; set; } = false;
     
     public bool EstaAtordoado { get; set; } = false;
+    public int DanoTemporario { get; set; } = 0;
     
     public Personagem()
     {

@@ -12,8 +12,6 @@ public class BombaMagica : ItemBatalha
 
     public override void AtivarBeneficio(Heroi heroi)
     {
-
-        heroi.QtdJogadasPorRodada = 1;
     }
 
     public override void RemoverBeneficio(Heroi heroi)
@@ -32,20 +30,35 @@ public class BombaMagica : ItemBatalha
 
     public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
     {
-        if (errouAtaque)
+        ProcessarErro(errouAtaque, () => heroi.ReceberDano(2), "Sua mão");
+    }   
+    public override void AplicarConsequencia(SandubinhaReverse sandubinhaReverse, Heroi heroi, bool errouAtaque)
+    {
+        ProcessarErro(errouAtaque, () => sandubinhaReverse.ReceberDano(2), "Sua mão");
+    }
+    public override void AtivarBeneficio(SandubinhaReverse sandubinha, Heroi heroiAlvo)
+    {
+        int novasJogadas = (int)Math.Floor(heroiAlvo.VidaMaxima * 0.8);
+        sandubinha.QtdJogadasPorRodada = novasJogadas < 1 ? 1 : novasJogadas;
+        Console.WriteLine($"[MÍMICA] Bomba do Sandubinha ajustada para {sandubinha.QtdJogadasPorRodada} jogadas.");
+    }
+    
+    private void ProcessarErro(bool errou, Action aplicarDano, string quem)
+    {
+        if (errou)
         {
             _errosNaBatalha++;
             if (_errosNaBatalha >= 3)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"A bomba instável explodiu na sua mão! Você perdeu 2 de vida.");
-                heroi.ReceberDano(2);
+                Console.WriteLine($"A bomba instável explodiu n{quem}! -2 Vida.");
+                aplicarDano();
                 Console.ResetColor();
                 _errosNaBatalha = 0;
             }
             else
             {
-                Console.WriteLine($"Cuidado! Erros acumulados com a bomba: {_errosNaBatalha}/3");
+                Console.WriteLine($"Tick-tock... Erros com a bomba: {_errosNaBatalha}/3");
             }
         }
     }

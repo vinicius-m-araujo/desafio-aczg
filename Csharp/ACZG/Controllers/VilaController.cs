@@ -14,13 +14,9 @@ public class VilaController
 
     public bool IniciarLutaVila(Heroi heroi)
     {
-        if (heroi.Inventario.Any(item => item.Nome == "Azah Transmissão") ||
-            heroi.ItemBatalhaEquipado.Nome == "Azah Transmissão")
-        {
-            Console.WriteLine("Você já venceu essa fase");
-            Console.ReadKey();
-            return true;
-        }
+        var todosItensDoHeroi
+        if()
+        bool temEspadaZg = false;
 
         if (_viewVilaDaTransmissao.IniciarFase()) return true;
 

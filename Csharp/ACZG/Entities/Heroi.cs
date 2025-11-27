@@ -19,6 +19,7 @@ public class Heroi : Personagem
         ItemBatalhaEquipado = new EspadaSimples();
         Salsichinha = new Salsichinha();
         PetAtivo = true;
+        DanoTemporario = 0;
     }
 
     public void AumentarVidaMaxima(int bonus)

@@ -134,16 +134,20 @@ public class SistemaBatalha
         Console.ForegroundColor = corTitulo;
         Console.WriteLine($"--- Rodada do {atacante.Nome} ---");
         Console.WriteLine($"Sorteia {qtdJogadas} no intervalo de vida do {alvo.Nome} [1-{alvo.VidaMaxima}]");
+        Console.ResetColor();
 
         var numeroSorteados = ListaNumerosSorteados(qtdJogadas, alvo.VidaMaxima);
-        Console.ResetColor();
-        var hero = atacante is Heroi ? atacante : alvo;
-        Heroi hotDog = (Heroi)hero;
+        var hotDog = (atacante as Heroi) ?? (alvo as Heroi);
         Worm? worm = alvo as Worm;
+        SandubinhaReverse? sandubinhaAtacante = atacante as SandubinhaReverse;
+        SandubinhaReverse? sandubinhaAlvo = alvo as SandubinhaReverse;
         int numeroParaAcertar = alvo.NumeroSecreto;
-
         bool ataqueComBomba = (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica);
 
+        if (atacante is Heroi && sandubinhaAlvo != null)
+        {
+            sandubinhaAlvo.ObservarHeroi(hotDog);
+        }
 
         if (worm != null && worm.EstaEnterrado)
         {

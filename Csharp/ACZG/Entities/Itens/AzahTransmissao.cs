@@ -10,7 +10,14 @@ public class AzahTransmissao : ItemBatalha
 
     public override void AtivarBeneficio(Heroi heroi)
     {
+        Console.WriteLine("Heroi voa com a capa! +10 jogadas.");
         heroi.QtdJogadasPorRodada += 10;
+    }
+    
+    public override void AtivarBeneficio(SandubinhaReverse sandubinha, Heroi heroiAlvo)
+    {
+        sandubinha.QtdJogadasPorRodada += 10;
+        Console.WriteLine($"[MÍMICA] Sandubinha voa com a capa! +10 jogadas.");
     }
 
     public override void RemoverBeneficio(Heroi heroi)
@@ -20,6 +27,6 @@ public class AzahTransmissao : ItemBatalha
 
     public override void AplicarConsequencia(Heroi heroi, Monstro monstro, bool errouAtaque)
     {
-        throw new NotImplementedException();
     }
+    
 }

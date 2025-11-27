@@ -22,4 +22,7 @@ public abstract class ItemBatalha
         AtivarBeneficio(heroi);
     }
     
+    public virtual void AtivarBeneficio(SandubinhaReverse sandubinha, Heroi heroiAlvo){}
+
+    public virtual void AplicarConsequencia(SandubinhaReverse sandubinha, Heroi heroiAlvo, bool errouAtaque){}
 }
