@@ -12,10 +12,31 @@ public class SandubinhaReverse : Monstro
     {
         if (heroi.ItemBatalhaEquipado != null)
         {
+            if (heroi.ItemBatalhaEquipado is Salsichinha)
+            {
+                if (ItemMimetizado != null)
+                {
+                    Console.WriteLine("[MÍMICA] Sandubinha tentou copiar o Salsichinha, mas não conseguiu domar a fera!");
+                    ItemMimetizado = null; 
+                }
+                return;
+            }
+
             if (ItemMimetizado == null || ItemMimetizado.GetType() != heroi.ItemBatalhaEquipado.GetType())
             {
-                
-                ItemMimetizado = heroi.ItemBatalhaEquipado; 
+                try
+                {
+                    ItemMimetizado = Activator.CreateInstance(heroi.ItemBatalhaEquipado.GetType()) as ItemBatalha;
+
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine($"[MÍMICA] Sandubinha analisou seus movimentos e materializou: {ItemMimetizado.Nome}!");
+                    Console.ResetColor();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ERRO MÍMICA] O Sandubinha falhou ao tentar copiar o item. Erro: {ex.Message}");
+                    ItemMimetizado = null;
+                }
             }
         }
     }
