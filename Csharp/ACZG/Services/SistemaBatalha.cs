@@ -60,6 +60,11 @@ public class SistemaBatalha
                     continue;
                 }
 
+                if (monstro is SandubinhaReverse sandu && sandu.ItemMimetizado != null)
+                {
+                    sandu.ItemMimetizado.AtivarBeneficio(sandu, hotDog);
+                }
+
                 ExecutarRodadaDeAtaque(
                     atacante: monstro,
                     qtdJogadas: monstro.QtdJogadasPorRodada,
@@ -142,13 +147,26 @@ public class SistemaBatalha
         SandubinhaReverse? sandubinhaAtacante = atacante as SandubinhaReverse;
         SandubinhaReverse? sandubinhaAlvo = alvo as SandubinhaReverse;
         int numeroParaAcertar = alvo.NumeroSecreto;
-        bool ataqueComBomba = (atacante is Heroi && hotDog.ItemBatalhaEquipado is BombaMagica);
 
         if (atacante is Heroi && sandubinhaAlvo != null)
         {
             sandubinhaAlvo.ObservarHeroi(hotDog);
         }
 
+        ItemBatalha? itemAtivo = null;
+        if (atacante is Heroi he)
+        {
+            itemAtivo = he.ItemBatalhaEquipado;
+        }
+        else if (sandubinhaAtacante != null)
+        {
+            itemAtivo = sandubinhaAtacante.ItemMimetizado;
+            if (itemAtivo != null)
+                Console.WriteLine($"[MÍMICA] Sandubinha está usando: {itemAtivo.Nome}!");
+        }
+        
+        bool ataqueComBomba = itemAtivo is BombaMagica;
+        
         if (worm != null && worm.EstaEnterrado)
         {
             if (ataqueComBomba)
@@ -169,41 +187,45 @@ public class SistemaBatalha
             }
         }
 
+        bool acertou = numeroSorteados.Contains(numeroParaAcertar);
 
-        if (numeroSorteados.Contains(numeroParaAcertar))
+
+        if (acertou)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             int qtdAparicoes = numeroSorteados.Count(numero => numero == numeroParaAcertar);
             int danoTotal = numeroParaAcertar * qtdAparicoes;
 
-            if (atacante.PetAtivo && !ataqueComBomba)
+            if (atacante.PetAtivo && atacante is Heroi && !ataqueComBomba)
             {
                 danoTotal += 1;
                 Console.WriteLine($"Salsichinha morde o {alvo.Nome} ferozmente!! (+1 dano)");
             }
 
-            if (atacante is Monstro monstroAtacante && monstroAtacante.DanoTemporario > 0)
+            if (atacante.DanoTemporario > 0)
             {
-                danoTotal += monstroAtacante.DanoTemporario;
-                Console.WriteLine($"O monstro usou força acumulada! {monstroAtacante.DanoTemporario}");
-                monstroAtacante.DanoTemporario = 0;
+                danoTotal += atacante.DanoTemporario;
+                Console.WriteLine($"Usou força acumulada! {atacante.DanoTemporario}");
+                atacante.DanoTemporario = 0;
             }
 
             if (ataqueComBomba)
             {
                 danoTotal = 0;
                 alvo.EstaAtordoado = true;
-                Console.WriteLine("KABOOM! A Bomba Mágica explodiu!");
-                Console.WriteLine($"O impacto atordoou o {alvo.Nome}! (Perde o próximo turno)");
-
                 if (worm != null && worm.EstaEnterrado)
                 {
                     Console.WriteLine("O impacto expulsou o Worm do subsolo!");
                     worm.EstaEnterrado = false;
                 }
+                Console.WriteLine("KABOOM! A Bomba Mágica explodiu!");
+                Console.WriteLine($"O impacto atordoou o {alvo.Nome}! (Perde o próximo turno)");
+
+                
             }
 
             alvo.ReceberDano(danoTotal);
+            
             if (ataqueComBomba)
             {
                 Console.WriteLine("Dano numérico anulado pela mágica da Bomba.");
@@ -235,23 +257,33 @@ public class SistemaBatalha
                 worm.MoverPeloSubSolo();
             }
 
-            if (atacante is Monstro monstroQueErrou && monstroQueErrou.DanoTemporario > 0)
+            if (atacante.DanoTemporario > 0)
             {
                 Console.WriteLine(
-                    $"O monstro errou o ataque e desperdiçou sua força acumulada de {monstroQueErrou.DanoTemporario}!");
-                monstroQueErrou.DanoTemporario = 0;
+                    $"O monstro errou o ataque e desperdiçou sua força acumulada de {atacante.DanoTemporario}!");
+                atacante.DanoTemporario = 0;
             }
-
+            
+            AplicarConsequenciaDeErro(atacante, alvo, itemAtivo);
+            
             Console.ResetColor();
 
 
-            if (atacante is Heroi)
-            {
-                if (alvo is Monstro monstroAlvo)
-                {
-                    hotDog.ItemBatalhaEquipado.AplicarConsequencia(hotDog, monstroAlvo, true);
-                }
-            }
+            
+        }
+    }
+
+
+
+    private static void AplicarConsequenciaDeErro(Personagem atacante, Personagem alvo, ItemBatalha? item)
+    {
+        if (atacante is Heroi heroi && alvo is Monstro monstro)
+        {
+            item.AplicarConsequencia(heroi, monstro, true);
+        }
+        else if (atacante is SandubinhaReverse sandu && alvo is Heroi heroiAlvo)
+        {
+            item.AplicarConsequencia(sandu, heroiAlvo, true);
         }
     }
 
