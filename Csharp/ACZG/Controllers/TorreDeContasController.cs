@@ -2,7 +2,7 @@
 
 namespace ACZG.Controllers;
 
-public class GloziumController
+public class TorreDeContasController
 {
     public void Start(Heroi heroi)
     {

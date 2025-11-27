@@ -4,7 +4,7 @@ public class ViewVilaDaTransmissao : ViewBase
 {
     public bool IniciarFase()
     {
-        return ExibirNarrativa("=== 3. Vila da Transmissão === \n" +
+        return ExibirNarrativa("=== 3. VILA DA TRANSMISSÃO === \n" +
                                "Uma vila mágica que recebe cobranças vindas das cavernas de Faturamentus.\n" +
                                "Os moradores entregam as mensagens na Torre.",
             "Hot Dog é bem recebido em sua chegada. Ele é convidado para um jantar ritualístico com comidas típicas",

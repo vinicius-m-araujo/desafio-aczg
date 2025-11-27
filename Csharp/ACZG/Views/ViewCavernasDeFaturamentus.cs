@@ -4,7 +4,7 @@ public class ViewCavernasDeFaturamentus : ViewBase
 {
     public bool IniciarFase()
     {
-        return ExibirNarrativa("=== 2.Caverna de Faturamentus === \n" +
+        return ExibirNarrativa("=== 2. CAVERNA DE FATURAMENTUS === \n" +
                                "Existe sempre um preço a se pagar pela cura do corpo e da alma, após a floresta do atendimentus " +
                                "seu preço é calculado de acordo com o tipo de contrato divino que você tem…",
             "Explorando a caverna com uma tocha, Hot Dog ouve sons metálicos ao longe." +
