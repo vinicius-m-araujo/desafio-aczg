@@ -166,6 +166,9 @@ public class SistemaBatalha
         }
         
         bool ataqueComBomba = itemAtivo is BombaMagica;
+        var ataqueComColar = itemAtivo is ColarDaEstatuaSagrada;
+        if(atacante is Heroi && ataqueComColar)
+            hotDog.ItemBatalhaEquipado.AtivarBeneficio(hotDog);
         
         if (worm != null && worm.EstaEnterrado)
         {

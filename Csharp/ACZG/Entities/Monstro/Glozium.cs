@@ -32,7 +32,7 @@ public class Glozium : Monstro
             Console.WriteLine("Glozium: 'Melhor não se mover. Desista e entregue a espada, e ele viverá. Recuse e ele morrerá.'");
             Console.ResetColor();
 
-            Console.WriteLine("\nO QUE VOCÊ FARÁ?");
+            Console.WriteLine("O QUE VOCÊ FARÁ?");
             Console.WriteLine("[1] Continuar a batalha (Recusar oferta)");
             Console.WriteLine("[2] Desistir (Salvar o cachorro, mas perder a honra)");
             

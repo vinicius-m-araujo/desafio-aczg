@@ -28,12 +28,6 @@ public class Heroi : Personagem
         VidaAtual += bonus;
     }
 
-    public void CurarVida(int vida)
-    {
-        VidaAtual += vida;
-        if (VidaAtual >= VidaMaxima) VidaAtual = VidaMaxima;
-    }
-
     public void AdicionarItem(ItemBatalha itemBatalha)
     {
         Inventario.Add(itemBatalha);
@@ -138,5 +132,14 @@ public class Heroi : Personagem
             Console.Clear();
             ExibirMenuInventario();
         }
+    }
+
+    private void AtivarFuriaBerserker()
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("=== Modo Berserker Ativado ===");
+        Console.WriteLine("Vida aumentada em 50!\n" +
+                          "Dano Triplicado!");
+        AumentarVidaMaxima(50);
     }
 }

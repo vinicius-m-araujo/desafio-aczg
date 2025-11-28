@@ -1,4 +1,5 @@
 ﻿using ACZG.Entities;
+using ACZG.Entities.Itens;
 using ACZG.Entities.Vilao;
 using ACZG.Enums;
 using ACZG.Services;
@@ -14,6 +15,32 @@ public class TorreDeContasController
 
     public bool Start(Heroi heroi)
     {
+        bool temCapa = heroi.ItemBatalhaEquipado is AzahTransmissao || heroi.Inventario.Any(i => i is AzahTransmissao);
+        if (temCapa)
+        {
+            Console.WriteLine("Herói equipa a Azah Transmissão e ativa a skill de voo!");
+            Console.WriteLine("Você Cruza os seus, ignorando os perigos do chão, e pousa suavemente.");
+
+            ItemBatalha itemExistente = heroi.Inventario.FirstOrDefault(i => i is AzahTransmissao);
+            heroi.TrocarItem(itemExistente);
+        }
+        else
+        {
+            Console.WriteLine("Você não possui o item Azah Transmissão e não pode voar");
+            Console.WriteLine("A jornada a pé é longa, cheia de obstáculos");
+            Console.WriteLine("Herói chega cansado na torre.");
+            Console.WriteLine("Consequência: -3 de Vida.");
+            heroi.ReceberDano(3);
+            Console.WriteLine($"Vida Atual: {heroi.VidaAtual}");
+
+            if (!heroi.EstaVivo)
+            {
+                Console.WriteLine("Você sucumbiu à exaustão.");
+                Console.ReadKey();
+                return false;
+            }
+        }
+        
         if (!_sandubinhaDerrotado)
         {
             _view.IniciarFaseSandubinha();
@@ -32,15 +59,19 @@ public class TorreDeContasController
             _view.MostrarCenaVitoriaSandubinha();
             _sandubinhaDerrotado = true;
 
-
-            heroi.AumentarVidaMaxima(10);
+            ItemBatalha colar = new ColarDaEstatuaSagrada();
+            heroi.AdicionarItem(colar);
+            heroi.AumentarVidaMaxima(5);
         }
 
-        bool subirAgora = _view.PerguntarSeSobeOuDesce();
-        if (!subirAgora) return true;
+        bool temFaturamentus = heroi.Inventario.Any(i => i is Faturamentus) || heroi.ItemBatalhaEquipado is Faturamentus;
+        bool temGuiaDeAtendimento = heroi.Inventario.Any(i => i is GuiaDeAtendimento) || heroi.ItemBatalhaEquipado is GuiaDeAtendimento;
+        bool temAzah = heroi.Inventario.Any(i => i is AzahTransmissao) || heroi.ItemBatalhaEquipado is AzahTransmissao;
+        bool temColarEstatua = heroi.Inventario.Any(i => i is ColarDaEstatuaSagrada) || heroi.ItemBatalhaEquipado is ColarDaEstatuaSagrada;
+        bool temEspadaZG = heroi.Inventario.Any(i => i is EspadaZg);
+        
 
 
-        bool temEspadaZG = heroi.Inventario.Any(i => i is EspadaZG);
 
         if (temEspadaZG)
         {
@@ -95,11 +126,11 @@ public class TorreDeContasController
         string escolha = Console.ReadLine().ToUpper();
 
         Random rnd = new Random();
-        int numeroGargula = rnd.Next(1, 11); // 1 a 10
+        int numeroGargula = rnd.Next(1, 11); 
         Console.WriteLine($"Gárgulas mostraram: {numeroGargula}");
 
-        bool ehPar = numeroGargula % 2 == 0;
-        bool venceu = (escolha == "P" && ehPar) || (escolha == "I" && !ehPar);
+        bool ePar = numeroGargula % 2 == 0;
+        bool venceu = (escolha == "P" && ePar) || (escolha == "I" && !ePar);
 
         return venceu;
     }
