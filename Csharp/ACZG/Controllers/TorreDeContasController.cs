@@ -106,7 +106,23 @@ public class TorreDeContasController
         }
         else
         {
-            Console.WriteLine("");
+            Console.WriteLine("O herói não possui todos os itens para construir a Espada ZG. Se quiser a espada conclua as outras fases");
+            Console.WriteLine("Deseja voltar para o menu? Digite [S] para Sim ou [N] para Não.");
+            while (true)
+            {
+                string op = Console.ReadLine().ToUpper();
+                if (op == "S")
+                {
+                    return true;
+                }
+
+                if (op == "N")
+                {
+                    break;
+                }
+
+                Console.WriteLine("Opção inválida. Digite [S] para Sim ou [N] para Não.");
+            }
         }
 
 
