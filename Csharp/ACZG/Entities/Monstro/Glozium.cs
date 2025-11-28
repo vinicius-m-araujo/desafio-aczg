@@ -56,8 +56,7 @@ public class Glozium : Monstro
                 _heroiAlvo.AumentarVidaMaxima(50); 
                 _heroiAlvo.QtdJogadasPorRodada *= 3;
                 
-                Console.WriteLine("=== MODO BERSERKER: Vida +50 | Ataque x3 ===");
-                Console.WriteLine("Pressione Enter para retomar a matança...");
+                Console.WriteLine("=== MODO BERSERKER ATIVADO: Vida +50 | Ataque x3 ===");
                 Console.ReadKey();
             }
         }

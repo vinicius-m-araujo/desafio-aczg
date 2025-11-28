@@ -38,18 +38,7 @@ public class Heroi : Personagem
     {
         Inventario.Add(itemBatalha);
     }
-
-    public void PagarComVida(int custo)
-    {
-        if (VidaAtual > custo)
-        {
-            VidaAtual -= custo;
-        }
-        else
-        {
-            Console.WriteLine("Você não tem vitalidade suficiente para este sacrifício!");
-        }
-    }
+    
 
     public void RealizarTrocaFisica(ItemBatalha novoItemBatalha)
     {
