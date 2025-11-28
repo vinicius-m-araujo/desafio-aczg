@@ -40,8 +40,6 @@ A solução atende aos seguintes critérios estabelecidos no enunciado:
 - [x] Interatividade do usuário via console/terminal.
 - [x] Lógica de batalha baseada em RNG (Random Number Generator).
 - [x] Possibilidade de jogar novamente ou desistir.
-- [ ] Side Quests implementadas (Ex: Filho do Comerciante).
-- [ ] [Opcional] Loja de Itens.
 
 
 

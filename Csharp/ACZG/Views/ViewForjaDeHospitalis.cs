@@ -56,13 +56,11 @@ public class ViewForjaDeHospitalis : ViewBase
     {
         ExibirNarrativa("ESPADA ZG FORJADA COM SUCESSO!\n" +
                         "Ferreiro: 'Vá e cumpra seu destino!");
-        Console.ReadKey();
     }
 
     public void MostrarFalha()
     {
         ExibirNarrativa("Ferreiro: 'Você ainda não tem tudo. Volte quando reunir os 4 artefatos.'");
-        Console.ReadKey();
     }
 
     public void MostrarMensagemJaPossui()

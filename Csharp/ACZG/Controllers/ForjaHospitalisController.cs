@@ -70,7 +70,8 @@ public class ForjaHospitalisController
         if (item == null) return;
         if (heroi.ItemBatalhaEquipado == item)
         {
-            heroi.ItemBatalhaEquipado = null;
+            item.RemoverBeneficio(heroi);
+            heroi.ItemBatalhaEquipado = new EspadaSimples();
         }
         else
         {

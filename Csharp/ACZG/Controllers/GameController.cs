@@ -12,6 +12,7 @@ public class GameController
     private CavernaController _caverna = new CavernaController();
     private VilaController _vila = new VilaController();
     private TorreDeContasController _torre = new TorreDeContasController();
+    private ForjaHospitalisController _forja = new ForjaHospitalisController();
     public void IniciarLutaTorre()
     {
         bool jogando = true;
@@ -20,7 +21,7 @@ public class GameController
         {
             _heroi = new Heroi();
             Console.Clear();
-            while (_heroi.EstaVivo && _heroi.Inventario.Count < 5)
+            while (_heroi.EstaVivo)
             {
                 Console.Clear();
                 Console.ResetColor();
@@ -33,6 +34,7 @@ public class GameController
                 Console.WriteLine("4. Torre de Contas a Receber (Região 4 - Chefe Final)");
                 Console.WriteLine("5. Forjar Espada ZG (Em Hospitalis)");
                 Console.WriteLine("6. Abrir inventário");
+                Console.WriteLine("7. Sair do jogo");
 
                 Console.WriteLine();
                 string escolha = Console.ReadLine();
@@ -55,8 +57,17 @@ public class GameController
                         _torre.Start(_heroi);
                         break;
                     
+                    case "5":
+                        _forja.ForjarEspadaZg(_heroi);
+                        break;
                     case "6":
                         _heroi.AbrirInventario();
+                        break;
+                    case "7":
+                        Console.Clear();    
+                        Console.WriteLine("Obrigado por jogar!");
+                        Console.ReadKey();
+                        Environment.Exit(0);
                         break;
 
                     default:

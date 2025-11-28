@@ -18,21 +18,23 @@ public class TorreDeContasController
         bool temCapa = heroi.ItemBatalhaEquipado is AzahTransmissao || heroi.Inventario.Any(i => i is AzahTransmissao);
         if (temCapa)
         {
+            Console.Clear();
             Console.WriteLine("Herói equipa a Azah Transmissão e ativa a skill de voo!");
             Console.WriteLine("Você Cruza os seus, ignorando os perigos do chão, e pousa suavemente.");
-
+            Console.ReadKey();
             ItemBatalha itemExistente = heroi.Inventario.FirstOrDefault(i => i is AzahTransmissao);
             heroi.TrocarItem(itemExistente);
         }
         else
         {
+            Console.Clear();
             Console.WriteLine("Você não possui o item Azah Transmissão e não pode voar");
             Console.WriteLine("A jornada a pé é longa, cheia de obstáculos");
             Console.WriteLine("Herói chega cansado na torre.");
             Console.WriteLine("Consequência: -3 de Vida.");
             heroi.ReceberDano(3);
             Console.WriteLine($"Vida Atual: {heroi.VidaAtual}");
-
+            Console.ReadKey();
             if (!heroi.EstaVivo)
             {
                 Console.WriteLine("Você sucumbiu à exaustão.");
@@ -86,16 +88,31 @@ public class TorreDeContasController
             Console.WriteLine("Deseja voltar ao Menu Principal para ir à Forja agora?");
             Console.WriteLine("[S] Sim, voltar para forjar | [N] Não, subir e enfrentar Glozium assim mesmo");
 
-            string op = Console.ReadLine().ToUpper();
-            if (op == "S")
+            while (true)
             {
-                return true; 
+                string op = Console.ReadLine().ToUpper();
+                if (op == "S")
+                {
+                    return true;
+                }
+
+                if (op == "N")
+                {
+                    break;
+                }
+
+                Console.WriteLine("Opção inválida. Digite [S] para Sim ou [N] para Não.");
             }
+        }
+        else
+        {
+            Console.WriteLine("");
         }
 
 
         if (temEspadaZG)
         {
+            Console.Clear();
             Console.WriteLine("Com a Espada ZG, você voa direto para a sala final!");
             Console.ReadKey();
         }
@@ -118,9 +135,10 @@ public class TorreDeContasController
 
         _view.IniciarFaseGlozium();
         var glozium = new Glozium(heroi);
-
         var resultadoFinal = _sistemaBatalha.Lutar(heroi, glozium);
 
+        if (glozium.Desistiu) return false;
+        
         if (resultadoFinal == ResultadoBatalha.Desistencia)
         {
             _view.MostrarFinal(false, temEspadaZG, true);
@@ -142,16 +160,33 @@ public class TorreDeContasController
         Console.Clear();
         Console.WriteLine("--- GÁRGULAS CAPTCHAS ---");
         Console.WriteLine("Elas bloqueiam o caminho! Vença no Par ou Ímpar.");
-        Console.Write("Escolha [P]ar ou [I]mpar: ");
-        string escolha = Console.ReadLine().ToUpper();
+        string escolha = "";
+        while (true)
+        {
+            Console.Write("Escolha [P]ar ou [I]mpar: ");
+            escolha = Console.ReadLine().ToUpper();
+
+            if (escolha == "P" || escolha == "I")
+            {
+                break;
+            }
+
+            Console.WriteLine("Opção inválida! Digite apenas P ou I.");
+        }
+
 
         Random rnd = new Random();
         int numeroGargula = rnd.Next(1, 11);
         Console.WriteLine($"Gárgulas mostraram: {numeroGargula}");
 
         bool ePar = numeroGargula % 2 == 0;
+
         bool venceu = (escolha == "P" && ePar) || (escolha == "I" && !ePar);
 
+        if (venceu) Console.WriteLine("Você venceu!");
+        else Console.WriteLine("Você perdeu...");
+
+        Console.ReadKey();
         return venceu;
     }
 }
