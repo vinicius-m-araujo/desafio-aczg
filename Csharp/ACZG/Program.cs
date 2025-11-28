@@ -12,6 +12,6 @@ class Program
     {
         Console.Title = "RPG ACZG";
         var controller = new GameController();
-        controller.Start();
+        controller.IniciarLutaTorre();
     }
 }

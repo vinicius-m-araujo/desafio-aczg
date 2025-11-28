@@ -40,7 +40,7 @@ public class TorreDeContasController
                 return false;
             }
         }
-        
+
         if (!_sandubinhaDerrotado)
         {
             _view.IniciarFaseSandubinha();
@@ -64,13 +64,34 @@ public class TorreDeContasController
             heroi.AumentarVidaMaxima(5);
         }
 
-        bool temFaturamentus = heroi.Inventario.Any(i => i is Faturamentus) || heroi.ItemBatalhaEquipado is Faturamentus;
-        bool temGuiaDeAtendimento = heroi.Inventario.Any(i => i is GuiaDeAtendimento) || heroi.ItemBatalhaEquipado is GuiaDeAtendimento;
+        bool temFaturamentus =
+            heroi.Inventario.Any(i => i is Faturamentus) || heroi.ItemBatalhaEquipado is Faturamentus;
+        bool temGuiaDeAtendimento = heroi.Inventario.Any(i => i is GuiaDeAtendimento) ||
+                                    heroi.ItemBatalhaEquipado is GuiaDeAtendimento;
         bool temAzah = heroi.Inventario.Any(i => i is AzahTransmissao) || heroi.ItemBatalhaEquipado is AzahTransmissao;
-        bool temColarEstatua = heroi.Inventario.Any(i => i is ColarDaEstatuaSagrada) || heroi.ItemBatalhaEquipado is ColarDaEstatuaSagrada;
-        bool temEspadaZG = heroi.Inventario.Any(i => i is EspadaZg);
-        
+        bool temColarEstatua = heroi.Inventario.Any(i => i is ColarDaEstatuaSagrada) ||
+                               heroi.ItemBatalhaEquipado is ColarDaEstatuaSagrada;
+        bool temEspadaZG = heroi.ItemBatalhaEquipado is EspadaZg;
 
+        if (temFaturamentus && temGuiaDeAtendimento && temAzah && temColarEstatua && !temEspadaZG)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("O Herói sente que reuniu todos os artefatos sagrados:");
+            Console.WriteLine("1. Faturamentus");
+            Console.WriteLine("2. Guia de Atendimento");
+            Console.WriteLine("3. Azah Transmissão");
+            Console.WriteLine("4. Colar da Estátua");
+            Console.WriteLine("Com esses itens, os ferreiros de Hospitalis podem criar a ESPADA ZG.");
+            Console.WriteLine("Deseja voltar ao Menu Principal para ir à Forja agora?");
+            Console.WriteLine("[S] Sim, voltar para forjar | [N] Não, subir e enfrentar Glozium assim mesmo");
+
+            string op = Console.ReadLine().ToUpper();
+            if (op == "S")
+            {
+                return true; 
+            }
+        }
 
 
         if (temEspadaZG)
@@ -113,7 +134,6 @@ public class TorreDeContasController
             _view.MostrarFinal(false, temEspadaZG, false);
         }
 
-        Environment.Exit(0);
         return true;
     }
 
@@ -126,7 +146,7 @@ public class TorreDeContasController
         string escolha = Console.ReadLine().ToUpper();
 
         Random rnd = new Random();
-        int numeroGargula = rnd.Next(1, 11); 
+        int numeroGargula = rnd.Next(1, 11);
         Console.WriteLine($"Gárgulas mostraram: {numeroGargula}");
 
         bool ePar = numeroGargula % 2 == 0;

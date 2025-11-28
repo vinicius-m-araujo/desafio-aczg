@@ -51,8 +51,7 @@ public class ViewTorreDeContas : ViewBase
         if (desistencia)
         {
             ExibirNarrativa("Glozium liberta herói e mascote, que sobrevivem, mas desonrados.",
-                "Glozium destrói o mundo.",
-                "BAD ENDING (COVARDE)");
+                "Glozium destrói o mundo.");
         }
         else if (!vitoria)
         {

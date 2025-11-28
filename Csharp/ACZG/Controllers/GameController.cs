@@ -11,8 +11,8 @@ public class GameController
     private FlorestaController _floresta = new FlorestaController();
     private CavernaController _caverna = new CavernaController();
     private VilaController _vila = new VilaController();
-
-    public void Start()
+    private TorreDeContasController _torre = new TorreDeContasController();
+    public void IniciarLutaTorre()
     {
         bool jogando = true;
 
@@ -50,12 +50,12 @@ public class GameController
                     case "3":
                         _vila.IniciarLutaVila(_heroi);
                         break;
-                    
+                        
                     case "4":
-                        Environment.Exit(0);
+                        _torre.Start(_heroi);
                         break;
                     
-                    case "7":
+                    case "6":
                         _heroi.AbrirInventario();
                         break;
 
