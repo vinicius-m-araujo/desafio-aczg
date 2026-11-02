@@ -41,5 +41,4 @@ A solução atende aos seguintes critérios estabelecidos no enunciado:
 - [x] Lógica de batalha baseada em RNG (Random Number Generator).
 - [x] Possibilidade de jogar novamente ou desistir.
 
-
-
+<!-- sync: repository update -->
